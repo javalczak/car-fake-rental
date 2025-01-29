@@ -1,2 +1,2 @@
 docker-compose up --build     
-docker exec -it _PHP_CONTAINER_NAME /bin/bash
+docker exec -it car-rental-php /bin/bash
