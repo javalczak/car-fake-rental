@@ -1,6 +1,9 @@
 # cache i vendor
 /var/
 /vendor/
+../.idea/
+.DS_Store
+
 
 # env'y
 # .env
@@ -30,3 +33,10 @@ docker/.DS_Store
 
 /config/jwt/*
 !/config/jwt/public.pem
+
+###> symfony/webpack-encore-bundle ###
+/node_modules/
+/public/build/
+npm-debug.log
+yarn-error.log
+###< symfony/webpack-encore-bundle ###

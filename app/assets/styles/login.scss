@@ -1,0 +1,85 @@
+body {
+  padding: 0;
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+
+  a {
+    text-decoration: underline;
+    color: blue;
+  }
+
+  .login-page {
+    width: 100%;
+    margin: auto;
+    height: 100vh;
+    padding: 20px;
+    box-sizing: border-box;
+    background-image: url('../img/delorean.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    input[type="text"], input[type="password"] {
+      width: 260px;
+      padding: 10px;
+      margin: 10px 0 0 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+      box-sizing: border-box;
+      display: block;
+    }
+
+    input[type="text"]:focus, input[type="password"]:focus {
+      border-color: #4A90E2;
+      outline: none;
+      box-shadow: 0 0 5px rgba(74, 144, 226, 0.5);
+    }
+
+    .button-login {
+      background-color: #007bff;
+      color: white;
+      font-size: 16px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      display: block;
+      margin: 10px 0 0 20px;
+    }
+
+    .button-login:hover {
+      background-color: #0056b3;
+    }
+
+    .button-login:active {
+      background-color: #003f7f;
+    }
+
+    .alert {
+      width: 260px;
+      padding: 10px;
+      margin: 10px 0 0 20px;
+      border: 1px solid white;
+      border-radius: 5px;
+      font-size: 16px;
+      box-sizing: border-box;
+      display: block;
+      color: red;
+    }
+
+    .currently-logged {
+      width: 260px;
+      padding: 10px;
+      margin: 10px 0 0 20px;
+      border: 1px solid gray;
+      border-radius: 5px;
+      font-size: 16px;
+      box-sizing: border-box;
+      display: block;
+      color: #525252;
+    }
+
+  }
+}
