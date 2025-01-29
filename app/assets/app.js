@@ -7,5 +7,6 @@
  */
 import './styles/app.scss';
 import './styles/login.scss';
+import './styles/sidebar.scss';
 
 console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉');
