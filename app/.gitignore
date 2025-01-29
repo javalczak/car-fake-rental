@@ -1,0 +1,32 @@
+# cache i vendor
+/var/
+/vendor/
+
+# env'y
+# .env
+# .env.local
+# .env.*.local
+# !.env.example
+
+# buildy i inne duperele
+/docker-compose.override.yml
+/docker-compose.override.yaml
+.docker/
+docker/.DS_Store
+
+# logi, kesze
+*.log
+.cache/
+.symfony.lock
+
+# Ide & macos shitting
+/.idea/
+/.vscode/
+
+# front
+/node_modules/
+/public/build/
+/public/bundles/
+
+/config/jwt/*
+!/config/jwt/public.pem

@@ -1,0 +1,64 @@
+version: '3.7'
+services:
+    # php, nginx
+    php-fpm:
+        container_name: car-rental-php
+        build:
+            context: ./docker/php-fpm
+        depends_on:
+            - database
+        environment:
+            - DATABASE_URL=mysql://${DATABASE_USER}:${DATABASE_PASSWORD}@database:3306/${DATABASE_NAME}?serverVersion=mariadb-10.5.8
+        volumes:
+            - ./app:/var/www/app
+        networks:
+            car-rental:
+    encore:
+        build:
+            context: ./Docker/node
+        volumes:
+            - ./app:/app
+        ports:
+            - "${DEV_SERVER_PORT:-8089}:8080"
+        working_dir: /app
+        #command: ["yarn", "install"]
+
+    nginx:
+        container_name: car-rental-nginx
+        build:
+            context: ./docker/nginx
+        volumes:
+            - ./app:/var/www/app/
+            - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf
+            - ./docker/nginx/sites/:/etc/nginx/sites-available
+            - ./docker/nginx/conf.d/:/etc/nginx/conf.d
+        depends_on:
+            - php-fpm
+        ports:
+            - "1102:80"
+        networks:
+            car-rental:
+
+    # database
+    database:
+        container_name: car-rental-db
+        build:
+            context: ./docker/database
+        environment:
+            - MARIADB_DATABASE=${DATABASE_NAME}
+            - MARIADB_USER=${DATABASE_USER}
+            - MARIADB_PASSWORD=${DATABASE_PASSWORD}
+            - MARIADB_ROOT_PASSWORD=${DATABASE_ROOT_PASSWORD}
+        ports:
+            - "3395:3306"
+        networks:
+            car-rental:
+
+networks:
+    car-rental:
+        driver: bridge
+
+volumes:
+    php-fpm:
+        driver: local
+

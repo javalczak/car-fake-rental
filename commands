@@ -1,0 +1,2 @@
+docker-compose up --build     
+docker exec -it _PHP_CONTAINER_NAME /bin/bash
