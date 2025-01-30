@@ -1,0 +1,45 @@
+{% extends 'admin-base.html.twig' %}
+{% block content %}
+
+   <h2>Add new vehicle</h2>
+   <hr>
+   <h5>Please fill the form below:</h5>
+
+   <br><br>
+
+   <form method="POST">
+
+      <label for="vehicle_name">
+         Robocza nazwa pojazdu (widoczne tylko dla administracji)
+         <input type="text" id="vehicle_name" name="vehicle_name" placeholder="Vehicle work name">
+      </label>
+
+      <label for="brand">
+         Marka
+         <input type="text" id="brand" name="brand" placeholder="Marka pojazdu">
+      </label>
+
+      <label for="model">
+         Model
+         <input type="text" id="model" name="model" placeholder="Model pojazdu">
+      </label>
+
+      <label for="fuel">
+         Paliwo
+         <select id="fuel" name="fuel">
+            {% for key, value in fuelTypeArray %}
+               <option value="{{ fuelTypeArray[key]['id'] }}">{{ fuelTypeArray[key]['fuelType'] }}</option>
+            {% endfor %}
+         </select>
+      </label>
+
+      <label for="description">
+         Opis
+         <textarea id="description" name="description" placeholder="Dodaj opis pojazdu"></textarea>
+      </label>
+
+      <button type="submit" class="submit-button">Dodaj pojazd</button>
+
+   </form>
+
+{% endblock %}

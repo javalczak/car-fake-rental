@@ -28,6 +28,9 @@ class Vehicle
     #[ORM\Column]
     private ?bool $maintenance = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $plate = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -89,6 +92,18 @@ class Vehicle
     public function setMaintenance(bool $maintenance): static
     {
         $this->maintenance = $maintenance;
+
+        return $this;
+    }
+
+    public function getPlate(): ?string
+    {
+        return $this->plate;
+    }
+
+    public function setPlate(?string $plate): static
+    {
+        $this->plate = $plate;
 
         return $this;
     }

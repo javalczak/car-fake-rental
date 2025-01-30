@@ -1,0 +1,29 @@
+#container {
+  vertical-align: top;
+
+  #content {
+
+    display: block;
+    width: calc(100% - 300px);
+    box-sizing: border-box;
+    padding: 20px;
+    float: right;
+    vertical-align: top;
+
+    h5 {
+      color: #616161;
+    }
+
+    .alert {
+      .alert-danger {
+        display: block;
+        margin-top: 20px;
+      }
+    }
+
+
+
+
+  }
+}
+

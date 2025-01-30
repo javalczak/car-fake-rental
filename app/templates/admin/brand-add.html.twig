@@ -1,0 +1,27 @@
+{% extends 'admin-base.html.twig' %}
+{% block content %}
+
+   <h2>Dodawanie marki pojazdu</h2>
+   <hr>
+   <h5>Wypełnij, proszę poniższy formularz:</h5>
+
+   {% for message in app.flashes('error') %}
+      <div class="alert alert-danger" role="alert">{{ message }}</div>
+   {% endfor %}
+
+   {% for message in app.flashes('ok') %}
+      <div class="alert alert-success" role="alert">{{ message }}</div>
+   {% endfor %}
+
+   <form method="POST">
+
+      <label for="brand">
+         Marka pojazdu:
+         <input type="text" id="brand" name="brand" placeholder="Np: FSO" >
+      </label>
+
+      <button type="submit" class="submit-button">Dodaj markę pojazdu</button>
+
+   </form>
+
+{% endblock %}

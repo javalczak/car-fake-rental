@@ -45,8 +45,7 @@ class AppCustomAuthenticator extends AbstractLoginFormAuthenticator
             return new RedirectResponse($targetPath);
         }
 
-
-        return new RedirectResponse('/admin');
+        return new RedirectResponse('/admin/vehicle-add');
 //        throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
     }
 
