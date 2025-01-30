@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Brand;
 use App\Entity\FuelType;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
@@ -23,7 +24,20 @@ class AppFixtures extends Fixture
         'energia elektryczna',
         'elerium-115',
         'siła mięśni',
-        'paliwo rakietowe'
+        'paliwo rakietowe',
+        'czary'
+    ];
+
+    private array $brandName = [
+        'Mitsubishi',
+        'Subaru',
+        'Ford',
+        'Opel',
+        'Tesla',
+        'Starship',
+        'Miotła',
+        'DMC DeLorean',
+        'Trampki'
     ];
 
     public function __construct(
@@ -49,6 +63,15 @@ class AppFixtures extends Fixture
             $newFuleType -> setAddedAt(new DateTime('now'));
 
             $manager -> persist($newFuleType);
+        }
+
+        $manager -> flush();
+
+        foreach ($this -> brandName as $item) {
+            $newBrand = new Brand();
+            $newBrand -> setName($item);
+
+            $manager -> persist($newBrand);
         }
 
         $manager -> flush();

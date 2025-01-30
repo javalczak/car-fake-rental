@@ -41,6 +41,6 @@ class BrandAddController extends AbstractController
             }
         }
 
-        return $this->render('admin/brand-add.html.twig');
+        return $this -> render('admin/brand-add.html.twig');
     }
 }

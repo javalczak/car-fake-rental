@@ -4,8 +4,6 @@ namespace App\Service;
 
 use App\Entity\Brand;
 use Exception;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
 
 class VehicleService extends AbstractService
 {
@@ -54,9 +52,33 @@ class VehicleService extends AbstractService
     {
         $brandEntity = new Brand();
         $brandEntity -> setName($brand);
-
         $this -> save($brandEntity);
 
         return true;
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function getBrandArray(): ? array
+    {
+        $result = $this -> brandRepo -> createQueryBuilder('table')
+            -> select('table')
+            -> orderBy('table.id', 'DESC')
+            -> getQuery()
+            -> getResult();
+
+        if (empty($result)) {
+            throw new Exception('Wynik jest pusty!');
+        }
+
+        foreach ($result as $item) {
+            $brandArray[] = [
+                'id' => $item -> getId(),
+                'name' => $item -> getName()
+            ];
+        }
+
+        return $brandArray ?? null;
     }
 }

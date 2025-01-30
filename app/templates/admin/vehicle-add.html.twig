@@ -15,8 +15,12 @@
       </label>
 
       <label for="brand">
-         Marka
-         <input type="text" id="brand" name="brand" placeholder="Marka pojazdu">
+         Paliwo
+         <select id="brand" name="brand">
+            {% for key, value in brandArray %}
+               <option value="{{ brandArray[key]['id'] }}">{{ brandArray[key]['name'] }}</option>
+            {% endfor %}
+         </select>
       </label>
 
       <label for="model">
