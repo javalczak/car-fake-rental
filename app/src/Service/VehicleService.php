@@ -95,4 +95,52 @@ class VehicleService extends AbstractService
 
         return $brandArray ?? null;
     }
+
+    public function getVehicleArray(): array
+    {
+        $result = $this -> vehicleRepo -> createQueryBuilder('table')
+            -> select('table')
+            -> orderBy('table.id', 'DESC')
+            -> getQuery()
+            -> getResult();
+
+        $vehicleArray = [];
+        /** @var Vehicle $item */
+        foreach ($result as $item) {
+            $vehicleArray[] = [
+                'id' => $item -> getId(),
+                'brand' => $item -> getBrand() -> getName(),
+                'type' => $item -> getType(),
+                'maintenance' => $item -> isMaintenance(),
+                'plate' => $item -> getPlate(),
+                'description' => $item -> getDescription(),
+                'fuel' => $item -> getFuel() -> getFuel()
+            ];
+        }
+
+        return $vehicleArray;
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function doesVehicleCanBeDeleted($vehicleId): bool
+    {
+        // sprawdzamy, czy taki vehicle istnieje
+        if (false === $this -> vehicleRepo -> find($vehicleId)) {
+            throw new Exception('Nie mamy takiej fury na stanie');
+        }
+
+        // sprawdzamy, czy jest w użyciu
+        // TODO: later
+
+        return true;
+    }
+
+    public function deleteVehicle($vehicleId): void
+    {
+        $result = $this -> getVehicleObject($vehicleId);
+        // TODO: clear rental history
+        $this -> delete($result);
+    }
 }

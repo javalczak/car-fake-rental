@@ -43,4 +43,9 @@ use Doctrine\ORM\EntityManagerInterface;
     {
         return $this -> fuelTypeRepo -> find($fuelTypeId);
     }
+
+    public function getVehicleObject($vehicleId)
+    {
+        return $this -> vehicleRepo -> find($vehicleId);
+    }
 }

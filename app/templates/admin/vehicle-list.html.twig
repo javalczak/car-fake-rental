@@ -1,0 +1,59 @@
+{% extends 'admin-base.html.twig' %}
+{% block content %}
+
+   <h2>Lista pojazdów</h2>
+   <hr>
+
+   {% for message in app.flashes('error') %}
+      <div class="alert alert-danger" role="alert">
+         {{ message }}
+      </div>
+   {% endfor %}
+
+   {% for message in app.flashes('success') %}
+      <div class="alert alert-success" role="alert">
+         {{ message }}
+      </div>
+   {% endfor %}
+
+
+   <table class="table table-striped">
+      <thead>
+      <tr>
+         <th scope="col">#</th>
+         <th scope="col">Marka</th>
+         <th scope="col">Model</th>
+         <th scope="col">Blacha</th>
+         <th scope="col">Paliwo</th>
+         <th scope="col">W serwisie</th>
+         <th scope="col">W użyciu</th>
+         <th scope="col"></th>
+      </tr>
+      </thead>
+      <tbody>
+
+      {% for key, value in vehicleArray %}
+
+         <tr {% if vehicleArray[key]['maintenance'] == 1 %} style="background-color: #ffc3c3;" {% endif %}>
+            <th scope="row">{{ key + 1 }}</th>
+            <td>{{ vehicleArray[key]['brand'] }}</td>
+            <td>{{ vehicleArray[key]['type'] }}</td>
+            <td>{{ vehicleArray[key]['plate'] }}</td>
+            <td>{{ vehicleArray[key]['fuel'] }}</td>
+            <td>{% if vehicleArray[key]['maintenance'] == 1 %} Tak {% endif %}</td>
+            <td></td>
+            <td>
+
+               <a onclick="return confirm('Potwierdź usunięcie');" href="/admin/vehicle-list?deleteId={{ vehicleArray[key]['id'] }}"><input class="button red" type="button" value="delete"></a>
+               <a href="#"><input class="button orange" type="button" value="edytuj"></a>
+               <a href="#"><input class="button green" type="button" value="kalendarz"></a>
+
+            </td>
+         </tr>
+
+      {% endfor %}
+
+      </tbody>
+   </table>
+
+{% endblock %}
