@@ -14,13 +14,7 @@ class Vehicle
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $brand = null;
-
-    #[ORM\Column(length: 255)]
     private ?string $type = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $fuel = null;
 
     #[ORM\Column(length: 255)]
     private ?string $vin = null;
@@ -31,21 +25,20 @@ class Vehicle
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $plate = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $description = null;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Brand $brand = null;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?FuelType $fuel = null;
+
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getBrand(): ?string
-    {
-        return $this->brand;
-    }
-
-    public function setBrand(string $brand): static
-    {
-        $this->brand = $brand;
-
-        return $this;
     }
 
     public function getType(): ?string
@@ -56,18 +49,6 @@ class Vehicle
     public function setType(string $type): static
     {
         $this->type = $type;
-
-        return $this;
-    }
-
-    public function getFuel(): ?string
-    {
-        return $this->fuel;
-    }
-
-    public function setFuel(string $fuel): static
-    {
-        $this->fuel = $fuel;
 
         return $this;
     }
@@ -104,6 +85,42 @@ class Vehicle
     public function setPlate(?string $plate): static
     {
         $this->plate = $plate;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): static
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    public function getBrand(): ?Brand
+    {
+        return $this->brand;
+    }
+
+    public function setBrand(?Brand $brand): static
+    {
+        $this->brand = $brand;
+
+        return $this;
+    }
+
+    public function getFuel(): ?FuelType
+    {
+        return $this->fuel;
+    }
+
+    public function setFuel(?FuelType $fuel): static
+    {
+        $this->fuel = $fuel;
 
         return $this;
     }

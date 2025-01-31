@@ -3,7 +3,9 @@
 namespace App\Service;
 
 use App\Entity\Brand;
+use App\Entity\Vehicle;
 use Exception;
+use InvalidArgumentException;
 
 class VehicleService extends AbstractService
 {
@@ -25,11 +27,23 @@ class VehicleService extends AbstractService
         return $fuelTypeArray ?? null;
     }
 
-    public function addNewVehicle()
+    public function addNewVehicle($brandId, $type, $fuelTypeId, $description, $vin, $plate, $maintenance): void
     {
-//        $newBrand = new Brand();
-//        $newBrand -> setName(]
+        // Walidacja
+        if (empty($brandId) || empty($type) || empty($fuelTypeId) || empty($vin) || empty($plate)) {
+            throw new InvalidArgumentException('Wszystkie wymagane pola (Marka, Model, Paliwo, VIN, Rejestracja) muszą być wypełnione.');
+        }
 
+        $newVehicle = new Vehicle();
+        $newVehicle -> setBrand($this -> getBrandObject($brandId));
+        $newVehicle -> setType(trim($type));
+        $newVehicle -> setFuel($this -> getFuelTypeObject($fuelTypeId));
+        $newVehicle -> setDescription(trim($description));
+        $newVehicle -> setVin(trim($vin));
+        $newVehicle -> setPlate(trim($plate));
+        $newVehicle -> setMaintenance($maintenance);
+
+        $this -> save($newVehicle);
     }
 
     public function doesBrandExists($brand): bool
@@ -64,7 +78,7 @@ class VehicleService extends AbstractService
     {
         $result = $this -> brandRepo -> createQueryBuilder('table')
             -> select('table')
-            -> orderBy('table.id', 'DESC')
+            -> orderBy('table.id', 'ASC')
             -> getQuery()
             -> getResult();
 

@@ -33,4 +33,14 @@ use Doctrine\ORM\EntityManagerInterface;
 
         return $object;
     }
+
+    public function getBrandObject($brandId)
+    {
+        return $this -> brandRepo -> find($brandId);
+    }
+
+    public function getFuelTypeObject($fuelTypeId)
+    {
+        return $this -> fuelTypeRepo -> find($fuelTypeId);
+    }
 }

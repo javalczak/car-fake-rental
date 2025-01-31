@@ -24,8 +24,10 @@ class AppFixtures extends Fixture
         'energia elektryczna',
         'elerium-115',
         'siła mięśni',
+        'hybryda',
         'paliwo rakietowe',
-        'czary'
+        'czary',
+        'reaktor jądrowy'
     ];
 
     private array $brandName = [

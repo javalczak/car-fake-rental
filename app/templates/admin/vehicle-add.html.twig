@@ -5,18 +5,23 @@
    <hr>
    <h5>Please fill the form below:</h5>
 
-   <br><br>
+   {% for message in app.flashes('error') %}
+      <div class="alert alert-danger" role="alert">
+         {{ message }}
+      </div>
+   {% endfor %}
+
+   {% for message in app.flashes('success') %}
+      <div class="alert alert-success" role="alert">
+         {{ message }}
+      </div>
+   {% endfor %}
 
    <form method="POST">
 
-      <label for="vehicle_name">
-         Robocza nazwa pojazdu (widoczne tylko dla administracji)
-         <input type="text" id="vehicle_name" name="vehicle_name" placeholder="Vehicle work name">
-      </label>
-
       <label for="brand">
-         Paliwo
-         <select id="brand" name="brand">
+         Marka pojazdu:
+         <select id="brand" name="brandId">
             {% for key, value in brandArray %}
                <option value="{{ brandArray[key]['id'] }}">{{ brandArray[key]['name'] }}</option>
             {% endfor %}
@@ -24,13 +29,13 @@
       </label>
 
       <label for="model">
-         Model
-         <input type="text" id="model" name="model" placeholder="Model pojazdu">
+         Model:
+         <input type="text" id="model" name="model" placeholder="Model pojazdu" >
       </label>
 
       <label for="fuel">
-         Paliwo
-         <select id="fuel" name="fuel">
+         Paliwo:
+         <select id="fuel" name="fuelTypeId">
             {% for key, value in fuelTypeArray %}
                <option value="{{ fuelTypeArray[key]['id'] }}">{{ fuelTypeArray[key]['fuelType'] }}</option>
             {% endfor %}
@@ -42,6 +47,22 @@
          <textarea id="description" name="description" placeholder="Dodaj opis pojazdu"></textarea>
       </label>
 
+      <label for="vin">
+         VIN:
+         <input type="text" id="vin" name="vin" placeholder="Numer VIN" >
+      </label>
+
+      <label for="plate">
+         Blacha:
+         <input type="text" id="plate" name="plate" placeholder="Numer rejestracyjny" >
+      </label>
+
+      <label for="maintenance">
+         <input type="checkbox" id="maintenance" name="maintenance" value="1">
+         IN MAINTENANCE (W serwisie)
+      </label>
+
+      <br>
       <button type="submit" class="submit-button">Dodaj pojazd</button>
 
    </form>
