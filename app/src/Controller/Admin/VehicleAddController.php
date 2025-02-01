@@ -25,21 +25,7 @@ class VehicleAddController extends AbstractController
         // simple validation
         if ($request -> isMethod('POST')) {
 
-            $fields = [
-                'brandId' => 'Marka',
-                'model' => 'Model',
-                'fuelTypeId' => 'Paliwo',
-                'vin' => 'VIN',
-                'plate' => 'Numer rejestracyjny'
-            ];
-
-            $missingFields = [];
-
-            foreach ($fields as $key => $label) {
-                if (empty(trim($request -> get($key)))) {
-                    $missingFields[] = $label;
-                }
-            }
+            $missingFields = $this -> vehicleService -> validateFields($request);
 
             if (!empty($missingFields)) {
                 $this -> addFlash('error', 'Brakujące pola: ' . implode(', ', $missingFields) . '!');

@@ -6,6 +6,7 @@ use App\Entity\Brand;
 use App\Entity\Vehicle;
 use Exception;
 use InvalidArgumentException;
+use Symfony\Component\HttpFoundation\Request;
 
 class VehicleService extends AbstractService
 {
@@ -86,6 +87,7 @@ class VehicleService extends AbstractService
             throw new Exception('Wynik jest pusty!');
         }
 
+        $brandArray = [];
         foreach ($result as $item) {
             $brandArray[] = [
                 'id' => $item -> getId(),
@@ -93,7 +95,7 @@ class VehicleService extends AbstractService
             ];
         }
 
-        return $brandArray ?? null;
+        return $brandArray;
     }
 
     public function getVehicleArray(): array
@@ -142,5 +144,57 @@ class VehicleService extends AbstractService
         $result = $this -> getVehicleObject($vehicleId);
         // TODO: clear rental history
         $this -> delete($result);
+    }
+
+    public function getVehicleData($vehicleId): array
+    {
+        $record = $this -> getVehicleObject($vehicleId);
+
+        return [
+            'id' => $record -> getId(),
+            'brandId' => $record -> getBrand() -> getId(),
+            'model' => $record -> getType(),
+            'fuelTypeId' => $record -> getFuel() -> getId(),
+            'fuelTypeName' => $record -> getFuel() -> getFuel(),
+            'description' => $record -> getDescription(),
+            'vin' => $record -> getVin(),
+            'plate' => $record -> getPlate(),
+            'maintenance' => $record -> isMaintenance(),
+        ];
+    }
+
+    public function updateVehicleData($vehicleId, $brandId, $type, $fuelTypeId, $description, $vin, $plate, $maintenance): void
+    {
+        $record = $this -> getVehicleObject($vehicleId);
+        $record -> setBrand($this -> getBrandObject($brandId));
+        $record -> setType(trim($type));
+        $record -> setFuel($this -> getFuelTypeObject($fuelTypeId));
+        $record -> setDescription(trim($description));
+        $record -> setVin(trim($vin));
+        $record -> setPlate(trim($plate));
+        $record -> setMaintenance($maintenance);
+
+        $this -> save($record);
+    }
+
+    public function validateFields(Request $request): array
+    {
+        $fields = [
+            'brandId' => 'Marka',
+            'model' => 'Model',
+            'fuelTypeId' => 'Paliwo',
+            'vin' => 'VIN',
+            'plate' => 'Numer rejestracyjny'
+        ];
+
+        $missingFields = [];
+
+        foreach ($fields as $key => $label) {
+            if (empty(trim($request -> $key))) {
+                $missingFields[] = $label;
+            }
+        }
+
+        return $missingFields;
     }
 }

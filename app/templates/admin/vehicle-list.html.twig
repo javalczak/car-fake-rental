@@ -45,7 +45,7 @@
             <td>
 
                <a onclick="return confirm('Potwierdź usunięcie');" href="/admin/vehicle-list?deleteId={{ vehicleArray[key]['id'] }}"><input class="button red" type="button" value="delete"></a>
-               <a href="#"><input class="button orange" type="button" value="edytuj"></a>
+               <a href="/admin/vehicle-edit?vehicleId={{ vehicleArray[key]['id'] }}"><input class="button orange" type="button" value="edytuj"></a>
                <a href="#"><input class="button green" type="button" value="kalendarz"></a>
 
             </td>

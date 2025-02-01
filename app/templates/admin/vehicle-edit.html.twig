@@ -1,0 +1,71 @@
+{% extends 'admin-base.html.twig' %}
+{% block content %}
+
+   <h2>Edytuj pojazd</h2>
+   <hr>
+   <h5>Wypełnij formularz poniżej:</h5>
+
+   {% for message in app.flashes('error') %}
+      <div class="alert alert-danger" role="alert">
+         {{ message }}
+      </div>
+   {% endfor %}
+
+   {% for message in app.flashes('success') %}
+      <div class="alert alert-success" role="alert">
+         {{ message }}
+      </div>
+   {% endfor %}
+
+   <form method="POST">
+   <input type="hidden" name="{{ vehicleId }}">
+
+      <label for="brand">
+         Marka pojazdu:
+         <select id="brand" name="brandId">
+            {% for key, value in brandArray %}
+               <option value="{{ brandArray[key]['id'] }}" {% if brandArray[key]['id'] == vehicleData['brandId'] %} selected {% endif %} >{{ brandArray[key]['name'] }}</option>
+            {% endfor %}
+         </select>
+      </label>
+
+      <label for="model">
+         Model:
+         <input type="text" id="model" name="model"  value="{{ vehicleData['model'] }}"  placeholder="Model pojazdu" >
+      </label>
+
+      <label for="fuel">
+         Paliwo:
+         <select id="fuel" name="fuelTypeId">
+            {% for key, value in fuelTypeArray %}
+               <option {% if fuelTypeArray[key]['fuelType'] == vehicleData['fuelTypeName'] %} selected {% endif %} value="{{ fuelTypeArray[key]['id'] }}">{{ fuelTypeArray[key]['fuelType'] }}</option>
+            {% endfor %}
+         </select>
+      </label>
+
+      <label for="description">
+         Opis
+         <textarea id="description" name="description" placeholder="Dodaj opis pojazdu">{{ vehicleData['description'] }}</textarea>
+      </label>
+
+      <label for="vin">
+         VIN:
+         <input type="text" id="vin" name="vin" value="{{ vehicleData['vin'] }}" placeholder="Numer VIN" >
+      </label>
+
+      <label for="plate">
+         Blacha:
+         <input type="text" id="plate" name="plate" value="{{ vehicleData['plate'] }}" placeholder="Numer rejestracyjny" >
+      </label>
+
+      <label for="maintenance">
+         <input type="checkbox" id="maintenance" name="maintenance" value="1" {% if vehicleData['maintenance'] %} checked {% endif %}>
+         IN MAINTENANCE (W serwisie)
+      </label>
+
+      <br>
+      <button type="submit" class="submit-button">zapisz zmiany</button>
+
+   </form>
+
+{% endblock %}
