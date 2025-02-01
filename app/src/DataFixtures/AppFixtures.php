@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\Brand;
+use App\Entity\City;
 use App\Entity\FuelType;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
@@ -42,6 +43,17 @@ class AppFixtures extends Fixture
         'Trampki'
     ];
 
+    private array $city = [
+        'Poznań',
+        'Sochaczew',
+        'Malbork',
+        'Lublin',
+        'Wałcz',
+        'Świdwin',
+        'Świdnik',
+        'Mirosławiec'
+    ];
+
     public function __construct(
         private readonly UserPasswordHasherInterface $hasher,
     ){}
@@ -69,11 +81,22 @@ class AppFixtures extends Fixture
 
         $manager -> flush();
 
+        // load brand names
         foreach ($this -> brandName as $item) {
             $newBrand = new Brand();
             $newBrand -> setName($item);
 
             $manager -> persist($newBrand);
+        }
+
+        $manager -> flush();
+
+        // load cities
+        foreach ($this -> city as $item) {
+            $city = new City();
+            $city -> setName($item);
+
+            $manager -> persist($city);
         }
 
         $manager -> flush();
