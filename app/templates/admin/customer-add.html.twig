@@ -1,0 +1,51 @@
+{% extends 'admin-base.html.twig' %}
+{% block content %}
+
+   <h2>Dodaj użytkownika pojazdu</h2>
+   <hr>
+   <h5>Wypełnij poniższy formularz:</h5>
+
+   {% for message in app.flashes('error') %}
+      <div class="alert alert-danger" role="alert">
+         {{ message }}
+      </div>
+   {% endfor %}
+
+   {% for message in app.flashes('success') %}
+      <div class="alert alert-success" role="alert">
+         {{ message }}
+      </div>
+   {% endfor %}
+
+   <form method="POST">
+
+      <label for="fullName">
+         Imię i nazwisko:
+         <input type="text" id="fullName" name="fullName" placeholder="imię i nazwisko" >
+      </label>
+
+      <label for="city">
+         Miejscowość:
+         <select id="city" name="city">
+            {% for key, value in cityArray %}
+               <option value="{{ cityArray[key]['id'] }}">{{ cityArray[key]['name'] }}</option>
+            {% endfor %}
+         </select>
+      </label>
+
+      <label for="address">
+         Adres:
+         <textarea id="address" name="address" placeholder="Podaj pełny adres (bez miejscowości)"></textarea>
+      </label>
+
+      <label for="id">
+         Seria i nr dowodu osobistego:
+         <input type="text" id="id" name="id" placeholder="seria i nr dowodu osobistego" >
+      </label>
+
+      <br>
+      <button type="submit" class="submit-button">Dodaj użytkownika</button>
+
+   </form>
+
+{% endblock %}

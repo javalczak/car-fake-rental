@@ -4,6 +4,8 @@ namespace App\Service;
 
 use AllowDynamicProperties;
 use App\Entity\Brand;
+use App\Entity\City;
+use App\Entity\Customer;
 use App\Entity\FuelType;
 use App\Entity\Vehicle;
 use Doctrine\ORM\EntityManagerInterface;
@@ -16,6 +18,7 @@ use Doctrine\ORM\EntityManagerInterface;
         $this -> vehicleRepo = $this -> em -> getRepository(Vehicle::class);
         $this -> fuelTypeRepo = $this -> em -> getRepository(FuelType::class);
         $this -> brandRepo = $this -> em -> getRepository(Brand::class);
+        $this -> cityRepo = $this -> em -> getRepository(City::class);
     }
 
     public function save($object)
@@ -47,5 +50,10 @@ use Doctrine\ORM\EntityManagerInterface;
     public function getVehicleObject($vehicleId)
     {
         return $this -> vehicleRepo -> find($vehicleId);
+    }
+
+    public function getCityObject($cityId)
+    {
+        return $this -> cityRepo -> find($cityId);
     }
 }

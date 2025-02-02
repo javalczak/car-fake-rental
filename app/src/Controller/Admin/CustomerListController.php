@@ -4,13 +4,12 @@ namespace App\Controller\Admin;
 
 use App\Service\CustomerService;
 use Exception;
-use InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-class CustomerAddController extends AbstractController
+class CustomerListController extends AbstractController
 {
     public function __construct(
         private readonly CustomerService $customerService
@@ -30,20 +29,6 @@ class CustomerAddController extends AbstractController
             if (!empty($missingFields)) {
                 $this -> addFlash('error', 'Brakujące pola: ' . implode(', ', $missingFields) . '!');
                 return $this -> redirectToRoute('admin_customer-add');
-            }
-
-            try {
-                $this -> customerService -> addCustomer(
-                    $request -> get('fullName'),
-                    $request -> get('address'),
-                    $request -> get('idNumber'),
-                    $request -> get('cityId')
-                );
-                $this -> addFlash('success', 'Użytkownik został dodany pomyślnie!');
-            } catch (InvalidArgumentException $e) {
-                $this -> addFlash('error', $e -> getMessage());
-
-                return $this -> redirectToRoute('admin_vehicle-add');
             }
 
 

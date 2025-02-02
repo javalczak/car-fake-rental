@@ -190,7 +190,7 @@ class VehicleService extends AbstractService
         $missingFields = [];
 
         foreach ($fields as $key => $label) {
-            if (empty(trim($request -> $key))) {
+            if (empty(trim($request -> get($key)))) {
                 $missingFields[] = $label;
             }
         }
