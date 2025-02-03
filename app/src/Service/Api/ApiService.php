@@ -7,12 +7,8 @@ use App\Entity\Brand;
 use App\Entity\City;
 use App\Entity\Customer;
 use App\Entity\Vehicle;
-use App\Service\AbstractService;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
-use InvalidArgumentException;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 #[AllowDynamicProperties] class ApiService
 {
@@ -32,6 +28,7 @@ use Symfony\Component\HttpFoundation\Response;
             -> getQuery()
             -> getResult();
 
+        $vehicleArray = [];
         foreach ($result as $item) {
             $vehicleArray[] = [
                 'id' => $item -> getId(),
@@ -62,17 +59,5 @@ use Symfony\Component\HttpFoundation\Response;
         $this -> em -> flush();
 
         return $newCustomer -> getId();
-    }
-
-    public function addCustomerValidator($params): bool
-    {
-        // validation
-        if (empty($params['fullName']) || empty($params['address']) || empty($params['idNumber']) || empty($params['cityId'])) {
-
-           return false;
-        } else {
-
-            return true;
-        }
     }
 }
