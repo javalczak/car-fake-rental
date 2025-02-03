@@ -1,0 +1,9 @@
+nelmio_api_doc:
+    documentation:
+        info:
+            title: "Vehicle API"
+            description: "Dokumentacja API dla listy pojazdów"
+            version: "1.0.0"
+    areas:
+        path_patterns:
+            - ^/api
