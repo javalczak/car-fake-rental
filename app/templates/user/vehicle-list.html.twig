@@ -1,0 +1,27 @@
+<h1>{[{ message }]}</h1>
+
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Marka</th>
+        <th>Typ</th>
+        <th>Typ paliwa</th>
+        <th>VIN</th>
+        <th>Tablica rejestracyjna</th>
+        <th>W użyciu</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="vehicle in vehicles">
+        <td>{[{ vehicle.id }]}</td>
+        <td>{[{ vehicle.brand }]}</td>
+        <td>{[{ vehicle.type }]}</td>
+        <td>{[{ vehicle.fuelType }]}</td>
+        <td>{[{ vehicle.vin }]}</td>
+        <td>{[{ vehicle.plate }]}</td>
+        <td>{[{ vehicle.inUse ? 'Tak' : 'Nie' }]}</td>
+    </tr>
+    </tbody>
+</table>
+
