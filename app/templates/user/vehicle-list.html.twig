@@ -1,27 +1,42 @@
-<h1>{[{ message }]}</h1>
+{% extends 'base.html.twig' %}
+{% block body %}
+    <div ng-app="vehicleApp" ng-controller="VehicleController">
 
-<table>
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>Marka</th>
-        <th>Typ</th>
-        <th>Typ paliwa</th>
-        <th>VIN</th>
-        <th>Tablica rejestracyjna</th>
-        <th>W użyciu</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr ng-repeat="vehicle in vehicles">
-        <td>{[{ vehicle.id }]}</td>
-        <td>{[{ vehicle.brand }]}</td>
-        <td>{[{ vehicle.type }]}</td>
-        <td>{[{ vehicle.fuelType }]}</td>
-        <td>{[{ vehicle.vin }]}</td>
-        <td>{[{ vehicle.plate }]}</td>
-        <td>{[{ vehicle.inUse ? 'Tak' : 'Nie' }]}</td>
-    </tr>
-    </tbody>
-</table>
+    <h1>{[{ message }]}</h1>
+
+    <table class="vehicleTable">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Pojazd</th>
+            <th>Paliwo</th>
+            <th>Blacha</th>
+            <th>W serwisie</th>
+            <th>W w użyciu</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="vehicle in vehicles">
+            <td>{[{ vehicle.id }]}</td>
+            <td>{[{ vehicle.brand }]} {[{vehicle.type}]}</td>
+            <td>{[{ vehicle.fuelType }]}</td>
+            <td>{[{ vehicle.plate }]}</td>
+            <td>{[{ vehicle.Maintenance == true ? 'Tak' : 'Nie' }]}</td>
+            <td></td>
+            <td>
+                <a href="/admin/vehicle-reserve?vehicleId={[{ vehicle.id }]}"><input class="button orange" type="button" value="zarezerwuj"></a>
+                <a href="/admin/vehicle-return?vehicleId={[{ vehicle.id }]}"><input class="button green" type="button" value="zwróć"></a>
+
+
+
+            </td>
+
+        </tr>
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+
+
 

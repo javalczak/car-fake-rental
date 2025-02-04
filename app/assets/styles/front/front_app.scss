@@ -1,5 +1,39 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap');
+$fontQuicksand: Quicksand, sans-serif;
+
+
 body {
 
-  background-color: gray;
+  font-family: $fontQuicksand;
+  font-size: 13px;
+  padding: 0;
+  box-sizing: border-box;
+
+  #container {
+    vertical-align: top;
+
+    #content {
+
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+      padding: 20px;
+      vertical-align: top;
+
+      .vehicleTable table {
+        border-radius: 4px;
+      }
+
+      .vehicleTable td {
+        border: 1px solid #cccccc;
+        padding: 5px;
+        box-sizing: border-box;
+      }
+
+
+    }
+  }
+
+
 
 }

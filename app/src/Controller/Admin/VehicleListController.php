@@ -16,6 +16,7 @@ class VehicleListController extends AbstractController
     ) {}
 
     #[Route('/admin/vehicle-list', name: 'admin_vehicle-list')]
+    #[Route('/admin/', name: 'admin')]
     public function index(Request $request): Response
     {
         $deleteId = $request -> get('deleteId');

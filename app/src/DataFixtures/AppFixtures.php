@@ -5,6 +5,7 @@ namespace App\DataFixtures;
 use App\Entity\Brand;
 use App\Entity\City;
 use App\Entity\FuelType;
+use App\Entity\Vehicle;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -54,6 +55,14 @@ class AppFixtures extends Fixture
         'Mirosławiec'
     ];
 
+    // dorzucamy parę fur
+    private array $vehicle = [
+        ['brandId' => '2', 'type' => 'SVX', 'vin' => '0987654321CCVFRT', 'plate' => 'PO-CSV55', 'description' => 'sportowe blachowkręty', 'maintenance' => false, 'fuelId' => 1],
+        ['brandId' => '2', 'type' => 'Galant', 'vin' => '098FR5589SSWT', 'plate' => 'PO-4567DS', 'description' => 'trzykolorowy, ale 6 garów', 'maintenance' => false, 'fuelId' => 2],
+        ['brandId' => '8', 'type' => 'Legendary', 'vin' => '09SDTYA76FRT', 'plate' => 'PO-AWARIA', 'description' => 'uszkodzony', 'maintenance' => true, 'fuelId' => 1],
+        ['brandId' => '5', 'type' => 'SN24,', 'vin' => '...', 'plate' => 'PO-SUROWCE', 'description' => 'Ma kopyto', 'maintenance' => false, 'fuelId' => 6],
+    ];
+
     public function __construct(
         private readonly UserPasswordHasherInterface $hasher,
     ){}
@@ -97,6 +106,27 @@ class AppFixtures extends Fixture
             $city -> setName($item);
 
             $manager -> persist($city);
+        }
+
+        $manager -> flush();
+
+        // load some vehicles
+        $brandRepo = $manager -> getRepository(Brand::class);
+        $fuelRepo = $manager -> getRepository(FuelType::class);
+        foreach ($this -> vehicle as $item) {
+
+            $newVehicle = new Vehicle();
+            $newVehicle -> setBrand($brandRepo -> find($item['brandId']));
+            $newVehicle -> setFuel($fuelRepo -> find($item['fuelId']));
+            $newVehicle -> setPlate($item['plate']);
+            $newVehicle -> setVin($item['vin']);
+            $newVehicle -> setType($item['type']);
+            $newVehicle -> setDescription($item['description']);
+            $newVehicle -> setMaintenance($item['maintenance']);
+            $newVehicle -> setAddedAt(new DateTime('now'));
+
+            $manager -> persist($newVehicle);
+
         }
 
         $manager -> flush();

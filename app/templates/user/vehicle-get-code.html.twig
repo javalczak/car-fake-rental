@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <div ng-app="vehicleApp" ng-controller="RentVehicleController">
+
+        <h1>Get rental code</h1>
+
+        <hr>
+        <h5>Wypełnij poniższy formularz:</h5>
+
+        {% for message in app.flashes('error') %}
+            <div class="alert alert-danger" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+
+        <form method="POST">
+
+            <label for="fullName">
+                Imię i nazwisko:
+                <input type="text" id="fullName" name="fullName" placeholder="imię i nazwisko" >
+            </label>
+
+
+            <label for="address">
+                Adres:
+                <textarea id="address" name="address" placeholder="Podaj pełny adres (bez miejscowości)"></textarea>
+            </label>
+
+            <button type="submit" class="submit-button">Dodaj użytkownika</button>
+
+        </form>
+
+
+    </div>
+{% endblock %}
+
+
+

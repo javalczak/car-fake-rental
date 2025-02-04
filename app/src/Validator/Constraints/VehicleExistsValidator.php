@@ -2,36 +2,36 @@
 
 namespace App\Validator\Constraints;
 
+use AllowDynamicProperties;
 use App\Repository\CityRepository;
+use App\Repository\VehicleRepository;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
-class CityExistsValidator extends ConstraintValidator
+#[AllowDynamicProperties] class VehicleExistsValidator extends ConstraintValidator
 {
-    private $cityRepo;
-
-    public function __construct(CityRepository $cityRepository)
+    public function __construct(VehicleRepository $vehicleRepository)
     {
-        $this->cityRepo = $cityRepository;
+        $this -> vehicleRepo = $vehicleRepository;
     }
 
     public function validate($value, Constraint $constraint)
     {
-        if (!$constraint instanceof CityExists) {
-            throw new UnexpectedTypeException($constraint, CityExists::class);
+        if (!$constraint instanceof VehicleExists) {
+            throw new UnexpectedTypeException($constraint, VehicleExists::class);
         }
 
         // is int?
         if (!is_numeric($value)) {
-            $this -> context -> buildViolation('City ID must be numeric.')
+            $this -> context -> buildViolation('Vehicle ID must be numeric.')
                 -> addViolation();
             return;
         }
 
         // city exist in schema?
-        $city = $this -> cityRepo -> find($value);
-        if (!$city) {
+        $vehicle = $this -> vehicleRepo -> find($value);
+        if (!$vehicle) {
             $this -> context -> buildViolation($constraint -> message)
                 -> setParameter('{{ value }}', $value)
                 -> addViolation();
