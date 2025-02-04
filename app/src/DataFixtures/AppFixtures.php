@@ -4,8 +4,10 @@ namespace App\DataFixtures;
 
 use App\Entity\Brand;
 use App\Entity\City;
+use App\Entity\Customer;
 use App\Entity\FuelType;
 use App\Entity\Vehicle;
+use Cassandra\Date;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -61,6 +63,11 @@ class AppFixtures extends Fixture
         ['brandId' => '2', 'type' => 'Galant', 'vin' => '098FR5589SSWT', 'plate' => 'PO-4567DS', 'description' => 'trzykolorowy, ale 6 garów', 'maintenance' => false, 'fuelId' => 2],
         ['brandId' => '8', 'type' => 'Legendary', 'vin' => '09SDTYA76FRT', 'plate' => 'PO-AWARIA', 'description' => 'uszkodzony', 'maintenance' => true, 'fuelId' => 1],
         ['brandId' => '5', 'type' => 'SN24,', 'vin' => '...', 'plate' => 'PO-SUROWCE', 'description' => 'Ma kopyto', 'maintenance' => false, 'fuelId' => 6],
+    ];
+
+    // jednego kierowce
+    private array $cunsomer = [
+       ['fullName' => 'Janek z Lublina', 'address' => 'www.janek.pl', 'idNumber' => 'janek', 'cityId' => 4],
     ];
 
     public function __construct(
@@ -127,6 +134,22 @@ class AppFixtures extends Fixture
 
             $manager -> persist($newVehicle);
 
+        }
+
+        $manager -> flush();
+
+        // add a customer
+        $cityRepo = $manager -> getRepository(City::class);
+        foreach ($this -> cunsomer as $item){
+
+            $customer = new Customer();
+            $customer -> setCity($cityRepo -> find($item['cityId']));
+            $customer -> setAddedAt(new DateTime('now'));
+            $customer -> setAddress($item['address']);
+            $customer -> setIdNumber($item['idNumber']);
+            $customer -> setFullName($item['fullName']);
+
+            $manager -> persist($customer);
         }
 
         $manager -> flush();

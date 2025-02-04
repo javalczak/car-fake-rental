@@ -37,7 +37,7 @@ use Doctrine\ORM\EntityManagerInterface;
                 'fuelType' => $item -> getFuel() -> getFuel(),
                 'vin' => $item -> getVin(),
                 'plate' => $item -> getPlate(),
-                'inMaintenance' => $item -> isMaintenance(),
+                'inMaintenance' => $item -> getMaintenance(),
                 'description' => $item -> getDescription(),
                 'inUse' => 1
             ];

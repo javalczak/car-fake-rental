@@ -19,4 +19,5 @@ app.controller('VehicleController', function($scope, $http) {
                 console.error('Błąd podczas pobierania danych:', error);
             });
 });
+console.log('kopy console');
 

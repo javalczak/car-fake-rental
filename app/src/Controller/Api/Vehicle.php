@@ -34,7 +34,7 @@ class Vehicle extends AbstractController
                                 new OA\Property(property: "fuelType", type: "string"),
                                 new OA\Property(property: "vin", type: "string"),
                                 new OA\Property(property: "plate", type: "string"),
-                                new OA\Property(property: "inMaintenance", type: "boolean"),
+                                new OA\Property(property: "inMaintenance", type: "int"),
                                 new OA\Property(property: "description", type: "string"),
                                 new OA\Property(property: "inUse", type: "integer"),
                             ]
