@@ -133,7 +133,6 @@ class AppFixtures extends Fixture
             $newVehicle -> setAddedAt(new DateTime('now'));
 
             $manager -> persist($newVehicle);
-
         }
 
         $manager -> flush();

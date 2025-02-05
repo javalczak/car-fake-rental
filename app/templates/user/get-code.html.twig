@@ -26,16 +26,23 @@
                 <input type="text" id="fullName" name="fullName" placeholder="imię i nazwisko" >
             </label>
 
+            <label for="city">
+                Miejscowość:
+                <select id="city" name="city">
+                    {% for key, value in cityArray %}
+                        <option value="{{ cityArray[key]['id'] }}">{{ cityArray[key]['name'] }}</option>
+                    {% endfor %}
+                </select>
+            </label>
 
             <label for="address">
                 Adres:
                 <textarea id="address" name="address" placeholder="Podaj pełny adres (bez miejscowości)"></textarea>
             </label>
 
-            <button type="submit" class="submit-button">Dodaj użytkownika</button>
+            <button type="submit" class="submit-button">Uzyskaj kod</button>
 
         </form>
-
 
     </div>
 {% endblock %}

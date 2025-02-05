@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 {% block body %}
-    <div ng-app="vehicleApp" ng-controller="VehicleController">
+    <div ng-controller="VehicleController">
 
     <h1>{[{ message }]}</h1>
 
@@ -17,7 +17,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr ng-repeat="vehicle in vehicles" {[{ vehicle.inMaintenance == 1 }]} >
+        <tr ng-repeat="vehicle in vehicles">
             <td>{[{ vehicle.id }]}</td>
             <td>{[{ vehicle.brand }]} {[{vehicle.type}]}</td>
             <td>{[{ vehicle.fuelType }]}</td>
@@ -25,10 +25,14 @@
             <td>{[{ vehicle.inMaintenance == 1 ? 'Tak' : 'Nie' }]}</td>
             <td></td>
             <td>
-                <a href="/admin/vehicle-reserve?vehicleId={[{ vehicle.id }]}"><input class="button orange" type="button" value="zarezerwuj"></a>
-                <a href="/admin/vehicle-return?vehicleId={[{ vehicle.id }]}"><input class="button green" type="button" value="zwróć"></a>
-            </td>
+                  <span ng-if="vehicle.inMaintenance == 1">
+                        <a href="/admin/vehicle-return?vehicleId={[{ vehicle.id }]}"><input class="button green" type="button" value="zwróć"></a>
+                  </span>
 
+                <span ng-if="vehicle.inMaintenance == 0">
+                        <a href="/admin/vehicle-return?vehicleId={[{ vehicle.id }]}"><input class="button orange" type="button" value="zarezerwuj"></a>
+                </span>
+            </td>
         </tr>
         </tbody>
     </table>
