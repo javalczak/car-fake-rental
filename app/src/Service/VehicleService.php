@@ -137,6 +137,13 @@ class VehicleService extends AbstractService
         return $vehicleArray;
     }
 
+    public function doesVehicleExist($vehicleId)
+    {
+        if (null === $this -> getVehicleObject($vehicleId)) {
+            return false ?? true;
+        }
+    }
+
     /**
      * @throws Exception
      */
@@ -176,7 +183,7 @@ class VehicleService extends AbstractService
             'description' => $record -> getDescription(),
             'vin' => $record -> getVin(),
             'plate' => $record -> getPlate(),
-            'maintenance' => $record -> isMaintenance(),
+            'maintenance' => $record -> getMaintenance(),
         ];
     }
 
@@ -194,7 +201,7 @@ class VehicleService extends AbstractService
         $this -> save($record);
     }
 
-    public function validateFields(Request $request): array
+    public function validateFields(Request $request, $vehicleId = null): array
     {
         $fields = [
             'brandId' => 'Marka',

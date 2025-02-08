@@ -22,15 +22,15 @@ class VehicleAddController extends AbstractController
     #[Route('/admin/vehicle-add', name: 'admin_vehicle-add')]
     public function index(Request $request): Response
     {
-        // simple validation
         if ($request -> isMethod('POST')) {
 
+            // simple validation
             $missingFields = $this -> vehicleService -> validateFields($request);
-
             if (!empty($missingFields)) {
                 $this -> addFlash('error', 'Brakujące pola: ' . implode(', ', $missingFields) . '!');
                 return $this -> redirectToRoute('admin_vehicle-add');
             }
+
             try {
                 $maintenance = $request -> get('maintenance') !== null;
                 $this -> vehicleService -> addNewVehicle(

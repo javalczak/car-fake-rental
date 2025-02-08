@@ -22,51 +22,43 @@ class VehicleEditController extends AbstractController
     #[Route('/admin/vehicle-edit', name: 'admin_vehicle-edit')]
     public function index(Request $request): Response
     {
+        // validate vehicle id
         $vehicleId = $request -> get('vehicleId');
 
-        if ($request -> isMethod('POST')) {
-            // TODO: move to service, just duplicate
-
-//            // simple validation
-//            if (!$this -> vehicleService -> getVehicleObject($vehicleId)) {
-//                $this -> addFlash('error', 'Brak takiego pojazdu!');
-//                return $this -> redirect('/admin/vehicle-list');
-//            }
-//
-//            $missingFields = $this -> vehicleService -> validateFields($request);
-//
-//            if (!empty($missingFields)) {
-//                $this -> addFlash('error', 'Brakujące pola: ' . implode(', ', $missingFields) . '!');
-//                return $this -> redirectToRoute('admin_vehicle-edit', [
-//                    'vehicleId' => $vehicleId,
-//                ]);
-//            }
-//        }
-
-//        try {
-            $maintenance = $request -> get('maintenance') !== null;
-            $this->vehicleService -> updateVehicleData(
-                $vehicleId,
-                $request -> get('brandId'),
-                $request -> get('model'),
-                $request -> get('fuelTypeId'),
-                $request -> get('description'),
-                $request -> get('vin'),
-                $request -> get('plate'),
-                $maintenance
-            );
-            $this -> addFlash('success', 'Zmiany zostały zapisane!');
+        if (false === $this -> vehicleService -> doesVehicleExist(trim((int) $vehicleId))) {
+            $this -> addFlash('error', 'Brak takiego pojazdu!');
+            return $this -> redirectToRoute('admin_vehicle-list');
         }
 
-//
-//
-//        } catch (InvalidArgumentException $e) {
-//            $this -> addFlash('error', $e -> getMessage());
-//
-//            return $this -> redirectToRoute('admin_vehicle-edit', [
-//                'vehicleId' => $vehicleId,
-//            ]);
-//        }
+        if ($request -> isMethod('POST')) {
+
+            // simple validation
+            $missingFields = $this -> vehicleService -> validateFields($request, $vehicleId);
+            if (!empty($missingFields)) {
+                $this -> addFlash('error', 'Brakujące pola: ' . implode(', ', $missingFields) . '!');
+                return $this -> redirect('/admin/vehicle-edit?vehicleId='.$vehicleId);
+            }
+
+            try {
+                $maintenance = $request -> get('maintenance') !== null;
+                $this -> vehicleService -> updateVehicleData(
+                    $vehicleId,
+                    $request -> get('brandId'),
+                    $request -> get('model'),
+                    $request -> get('fuelTypeId'),
+                    $request -> get('description'),
+                    $request -> get('vin'),
+                    $request -> get('plate'),
+                    $maintenance
+                );
+                $this -> addFlash('success', 'Zmiany zostały zapisane!');
+
+            } catch (InvalidArgumentException $e) {
+                $this -> addFlash('error', $e -> getMessage());
+
+                return $this -> redirectToRoute('admin_vehicle-list');
+            }
+        }
 
         return $this->render('admin/vehicle-edit.html.twig', [
             'vehicleData' => $this -> vehicleService -> getVehicleData($vehicleId),
