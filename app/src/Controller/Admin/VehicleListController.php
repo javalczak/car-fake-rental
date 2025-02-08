@@ -30,11 +30,9 @@ class VehicleListController extends AbstractController
             } catch (Exception $e) {
                 $this -> addFlash('error', 'Błąd: ' . $e -> getMessage());
             }
-
-            return $this -> redirectToRoute('admin_vehicle-list');
         }
 
-        $vehicleArray = $this->vehicleService -> getVehicleArray();
+        $vehicleArray = $this -> vehicleService -> getVehicleArray();
 
         return $this -> render('admin/vehicle-list.html.twig', [
             'vehicleArray' => $vehicleArray,

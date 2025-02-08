@@ -1,4 +1,3 @@
-
 var app = angular.module('vehicleApp', []);
 
 app.config(function($interpolateProvider) {
@@ -6,35 +5,61 @@ app.config(function($interpolateProvider) {
 });
 
 app.controller('VehicleController', function($scope, $http) {
-
-    console.log('Kontroler działa!');
-
+    console.log('Kontroler VehicleController działa!');
 
     // vehicle:get
     $scope.title = 'wynajem pojazdów - lista';
-
     $http.get('http://localhost:1102/api/vehicle')
         .then(function(response) {
-
             $scope.vehicles = response.data.items;
-            console.log('Dane pojazdów:', $scope.vehicles);
+            $scope.errorMessage = 'Nie można pobrać listy pojazdów';
         })
         .catch(function(error) {
             console.error('Błąd podczas pobierania danych:', error);
         });
+});
 
-    console.log('teraz post');
+app.controller('GetCodeController', function($scope, $http) {
 
+    $scope.errorMessage = '';
+    $scope.message = '';
 
-    $http.post('http://localhost:1102/api/customer', {fullName: 'Marcin', address: 'Bura 15', 'idNumber': 'ASSD', cityId: 1})
-        .then(function(response) {
-            console.log('Odpowiedź z API customer:', response.data);
-            // Możesz dodać coś, co ma się wydarzyć po pomyślnym wysłaniu (np. komunikat dla użytkownika)
+    console.log('Kontroler GetCodeController działa!');
+
+    $scope.customerData = {
+        fullName: '',
+        cityId: 1,
+        address: '',
+    };
+
+    $scope.submitForm = function () {
+        console.log('form działa!');
+
+        var fullName = $scope.customerData.fullName;
+        var address = $scope.customerData.address;
+
+        $http.post('http://localhost:1102/api/customer', {
+            fullName: fullName,
+            address: address,
+            cityId: 1,
+
         })
-        .catch(function(error) {
-            console.error('Błąd podczas wysyłania danych do customer:', error);
-        });
-
+            .then(function (response) {
+                console.log('Odpowiedź z API:', response.data);
+                $scope.message = response.data.message[1];
+                $scope.messageType = response.data.success;
+                console.log('Odpowiedź z API:', 'poformatowano');
+            })
+            .catch(function (error) {
+                console.error('Błąd podczas wysyłania danych do customer:', error);
+                $scope.errorMessage = response.data.message[1];
+                $scope.errorMssageType = response.data.success;
+                console.log('Odpowiedź z API:', 'nie wieszlo na pozionie web');
+            });
+    }
 
 });
+
+
+
 

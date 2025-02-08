@@ -31,7 +31,6 @@ class VehicleAddController extends AbstractController
                 $this -> addFlash('error', 'Brakujące pola: ' . implode(', ', $missingFields) . '!');
                 return $this -> redirectToRoute('admin_vehicle-add');
             }
-
             try {
                 $maintenance = $request -> get('maintenance') !== null;
                 $this -> vehicleService -> addNewVehicle(

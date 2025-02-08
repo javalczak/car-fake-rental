@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Entity\Brand;
 use App\Entity\Vehicle;
+use DateTime;
 use Exception;
 use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,6 +18,7 @@ class VehicleService extends AbstractService
             -> orderBy('table.id', 'ASC')
             -> getQuery()
             -> getResult();
+
 
         foreach ($result as $item) {
             $fuelTypeArray[] = [
@@ -35,6 +37,17 @@ class VehicleService extends AbstractService
             throw new InvalidArgumentException('Wszystkie wymagane pola (Marka, Model, Paliwo, VIN, Rejestracja) muszą być wypełnione.');
         }
 
+        // fuel type musi istnieć w Entity
+        if (null === $this -> getFuelTypeObject(trim($fuelTypeId))) {
+            throw new InvalidArgumentException('Brak takiego typu paliwa');
+        }
+
+        // marka również
+        if (null === $this -> getBrandObject(trim($brandId))) {
+            throw new InvalidArgumentException('Brak takiej marki');
+        }
+
+        /** @var Vehicle $newVehicle */
         $newVehicle = new Vehicle();
         $newVehicle -> setBrand($this -> getBrandObject($brandId));
         $newVehicle -> setType(trim($type));
@@ -43,6 +56,7 @@ class VehicleService extends AbstractService
         $newVehicle -> setVin(trim($vin));
         $newVehicle -> setPlate(trim($plate));
         $newVehicle -> setMaintenance($maintenance);
+        $newVehicle -> setAddedAt(new DateTime('now'));
 
         $this -> save($newVehicle);
     }
@@ -113,7 +127,7 @@ class VehicleService extends AbstractService
                 'id' => $item -> getId(),
                 'brand' => $item -> getBrand() -> getName(),
                 'type' => $item -> getType(),
-                'maintenance' => $item -> isMaintenance(),
+                'maintenance' => $item -> getMaintenance(),
                 'plate' => $item -> getPlate(),
                 'description' => $item -> getDescription(),
                 'fuel' => $item -> getFuel() -> getFuel()
@@ -129,7 +143,7 @@ class VehicleService extends AbstractService
     public function doesVehicleCanBeDeleted($vehicleId): bool
     {
         // sprawdzamy, czy taki vehicle istnieje
-        if (false === $this -> vehicleRepo -> find($vehicleId)) {
+        if (null === $this -> vehicleRepo -> find($vehicleId)) {
             throw new Exception('Nie mamy takiej fury na stanie');
         }
 
@@ -141,8 +155,11 @@ class VehicleService extends AbstractService
 
     public function deleteVehicle($vehicleId): void
     {
-        $result = $this -> getVehicleObject($vehicleId);
         // TODO: clear rental history
+
+
+
+        $result = $this -> getVehicleObject($vehicleId);
         $this -> delete($result);
     }
 

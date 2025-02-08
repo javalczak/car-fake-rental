@@ -42,7 +42,7 @@ use Doctrine\ORM\EntityManagerInterface;
         return $this -> brandRepo -> find($brandId);
     }
 
-    public function getFuelTypeObject($fuelTypeId)
+    public function getFuelTypeObject($fuelTypeId = 789)
     {
         return $this -> fuelTypeRepo -> find($fuelTypeId);
     }

@@ -40,7 +40,8 @@ class RentVehicle extends AbstractController
             return $this->json(['success' => false, 'errors' => $errorMessages], Response::HTTP_BAD_REQUEST);
         }
 
-        // rent a vevicle
+        // customer exists
+
 
 
         $rentId = 1;

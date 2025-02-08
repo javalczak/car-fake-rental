@@ -11,6 +11,6 @@ class RentVehicleController extends AbstractController
     #[Route('/user/vehicle-ge', name: 'user_vehicle-rent')]
     public function index(): Response
     {
-        return $this -> render('user/vehicle-rent.html.twig');
+        return $this -> render('user/rent-vehicle.html.twig');
     }
 }

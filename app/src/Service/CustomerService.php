@@ -10,7 +10,6 @@ use Symfony\Component\HttpFoundation\Request;
 
 class CustomerService extends AbstractService
 {
-
     /**
      * @throws Exception
      */

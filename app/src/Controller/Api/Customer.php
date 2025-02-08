@@ -29,8 +29,7 @@ class Customer extends AbstractController
                 properties: [
                     new OA\Property(property: "fullName", description: "Pełna nazwa klienta", type: "string"),
                     new OA\Property(property: "address", description: "Adres klienta", type: "string"),
-                    new OA\Property(property: "idNumber", description: "Numer identyfikacyjny klienta", type: "string"),
-                    new OA\Property(property: "cityId", description: "ID miasta, w którym mieszka klient", type: "integer")
+                    new OA\Property(property: "cityId", description: "ID miasta, w którym mieszka klient", type: "integer"),
                 ]
             )
         ),
@@ -63,10 +62,9 @@ class Customer extends AbstractController
         $params = json_decode($request->getContent(), true);
 
         $dto = new CreateCustomerDto();
-        $dto -> fullName = $params['fullName'] ?? null;
-        $dto -> address = $params['address'] ?? null;
-        $dto -> idNumber = $params['idNumber'] ?? null;
-        $dto -> cityId = $params['cityId'] ?? null;
+        $dto -> fullName = $params['fullName'];
+        $dto -> address = $params['address'] ;
+        $dto -> cityId = $params['cityId'];
 
         // validate
         $errors = $validator -> validate($dto);
@@ -76,17 +74,13 @@ class Customer extends AbstractController
             foreach ($errors as $error) {
                 $errorMessages[] = $error -> getMessage();
             }
-            return $this -> json(['success' => false, 'errors' => $errorMessages], Response::HTTP_BAD_REQUEST);
+            return $this -> json(['success' => false, 'message' => '', 'errorMessage' => $errorMessages], Response::HTTP_OK);
         }
 
-        // add a customer
-        $customerId = $this -> apiService -> addCustomer(
-            $dto -> fullName,
-            $dto -> address,
-            $dto -> idNumber,
-            $dto -> cityId
-        );
+        $rentalCode = $this -> apiService -> generateRentalCode(8, 88888);
 
-        return $this -> json(['success' => true, 'customerId' => $customerId], Response::HTTP_OK);
+        $newCustomerId = $this -> apiService -> addCustomer($dto -> fullName, $dto -> address, $dto -> cityId, $rentalCode);
+
+        return $this -> json(['success' => true, 'customerId' => $newCustomerId], Response::HTTP_OK);
     }
 }

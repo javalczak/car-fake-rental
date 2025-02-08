@@ -13,9 +13,6 @@ class CreateCustomerDto
     #[Assert\NotBlank(message: 'Address is required.')]
     public string $address;
 
-    #[Assert\NotBlank(message: "ID Number is required.")]
-    public string $idNumber;
-
     #[Assert\NotBlank(message: 'City ID is required.')]
     #[Assert\Type(type: 'numeric', message: 'City ID must be a number.')]
     #[CityExists]

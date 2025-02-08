@@ -1,50 +1,39 @@
 {% extends 'base.html.twig' %}
 {% block body %}
-    <div ng-app="vehicleApp" ng-controller="RentVehicleController">
+    <div ng-controller="GetCodeController">
 
         <h1>Get rental code</h1>
-
+            <div  ng-if="errorMessage" class="alert alert-danger" role="alert">{[{ errorMessage }]}</div>
+            <div  ng-if="message" class="success alert-success" role="alert">{[{ message }]}</div>
         <hr>
         <h5>Wypełnij poniższy formularz:</h5>
-
-        {% for message in app.flashes('error') %}
-            <div class="alert alert-danger" role="alert">
-                {{ message }}
-            </div>
-        {% endfor %}
-
-        {% for message in app.flashes('success') %}
-            <div class="alert alert-success" role="alert">
-                {{ message }}
-            </div>
-        {% endfor %}
 
         <form method="POST">
 
             <label for="fullName">
                 Imię i nazwisko:
-                <input type="text" id="fullName" name="fullName" placeholder="imię i nazwisko" >
+                <input type="text" id="fullName" name="fullName" value="" ng-model="customerData.fullName" placeholder="imię i nazwisko" >
             </label>
 
             <label for="city">
                 Miejscowość:
-                <select id="city" name="city">
+                <select id="city" name="city" >
                     {% for key, value in cityArray %}
-                        <option value="{{ cityArray[key]['id'] }}">{{ cityArray[key]['name'] }}</option>
+                        <option  value="{{ cityArray[key]['id'] }}">{{ cityArray[key]['name'] }}</option>
                     {% endfor %}
                 </select>
             </label>
 
             <label for="address">
                 Adres:
-                <textarea id="address" name="address" placeholder="Podaj pełny adres (bez miejscowości)"></textarea>
+                <textarea id="address" name="address" placeholder="Podaj pełny adres (bez miejscowości)" ng-model="customerData.address"></textarea>
             </label>
 
-            <button type="submit" class="submit-button">Uzyskaj kod</button>
+            <button type="submit" class="submit-button" ng-click="submitForm()">Uzyskaj kod</button>
+
 
         </form>
 
-    </div>
 {% endblock %}
 
 
