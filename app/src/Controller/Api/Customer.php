@@ -77,10 +77,16 @@ class Customer extends AbstractController
             return $this -> json(['success' => false, 'message' => '', 'errorMessage' => $errorMessages], Response::HTTP_OK);
         }
 
-        $rentalCode = $this -> apiService -> generateRentalCode(8, 88888);
+        // user exists? Return his code
+        $existsUserResult = $this -> apiService -> doesFullNameExists($dto -> fullName);
 
-        $newCustomerId = $this -> apiService -> addCustomer($dto -> fullName, $dto -> address, $dto -> cityId, $rentalCode);
+        if (!empty($existsUserResult)) {
+            return $this -> json(['success' => true, 'user_exists' => true, 'rentalCode' => $existsUserResult], Response::HTTP_OK);
+        }
 
-        return $this -> json(['success' => true, 'customerId' => $newCustomerId], Response::HTTP_OK);
+        $rentalCode = $this -> apiService -> generateUniqueCode();
+        $this -> apiService -> addCustomer($dto -> fullName, $dto -> address, $dto -> cityId, $rentalCode);
+
+        return $this -> json(['success' => true, 'rentalCode' => $rentalCode], Response::HTTP_OK);
     }
 }

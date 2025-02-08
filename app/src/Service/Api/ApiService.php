@@ -57,7 +57,7 @@ use Doctrine\ORM\EntityManagerInterface;
             -> getResult();
     }
 
-    public function addCustomer($fullName, $address, $cityId, $rentalCode): int
+    public function addCustomer($fullName, $address, $cityId, $rentalCode): string
     {
         $newCustomer = new Customer();
         $newCustomer -> setFullName(trim($fullName));
@@ -69,7 +69,7 @@ use Doctrine\ORM\EntityManagerInterface;
         $this -> em -> persist($newCustomer);
         $this -> em -> flush();
 
-        return $newCustomer -> getId();
+       return $newCustomer -> getIdNumber();
     }
 
     public function getCityArray(): array
@@ -86,8 +86,27 @@ use Doctrine\ORM\EntityManagerInterface;
         return $citiArray;
     }
 
-    public function generateRentalCode($min, $max): int
+    public function generateUniqueCode(): string
     {
-        return rand($min, $max);
+        return substr(str_shuffle(str_repeat(
+            '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ', 6
+        )), 0, 6);
+    }
+
+    public function doesFullNameExists($fullName)
+    {
+        $result = $this -> customerRepo -> createQueryBuilder('table')
+            -> select('table')
+            -> where('table.fullName = :fullName')
+            -> setParameter('fullName', $fullName)
+
+            -> getQuery()
+            -> getResult();
+
+        if ([] == $result) {
+            return null;
+        } else {
+           return $result[0] -> getIdNumber();
+        }
     }
 }
