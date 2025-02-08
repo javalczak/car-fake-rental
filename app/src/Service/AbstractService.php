@@ -19,6 +19,7 @@ use Doctrine\ORM\EntityManagerInterface;
         $this -> fuelTypeRepo = $this -> em -> getRepository(FuelType::class);
         $this -> brandRepo = $this -> em -> getRepository(Brand::class);
         $this -> cityRepo = $this -> em -> getRepository(City::class);
+        $this -> customerRepo = $this -> em -> getRepository(Customer::class);
     }
 
     public function save($object)
@@ -55,5 +56,10 @@ use Doctrine\ORM\EntityManagerInterface;
     public function getCityObject($cityId)
     {
         return $this -> cityRepo -> find($cityId);
+    }
+
+    public function getCustomerObject($customerId)
+    {
+        return $this -> customerRepo -> find($customerId);
     }
 }

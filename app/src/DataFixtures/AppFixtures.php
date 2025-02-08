@@ -67,7 +67,7 @@ class AppFixtures extends Fixture
 
     // jednego kierowce
     private array $cunsomer = [
-       ['fullName' => 'Janek z Lublina', 'address' => 'www.janek.pl', 'idNumber' => 'janek', 'cityId' => 4],
+       ['fullName' => 'Janek z Lublina', 'address' => 'www.janek.pl', 'idNumber' => '1234', 'cityId' => 4],
     ];
 
     public function __construct(

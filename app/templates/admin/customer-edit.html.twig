@@ -17,26 +17,26 @@
       </div>
    {% endfor %}
 
-
    <form method="POST">
+      <input type="hidden" name="customerId" value="{{ customerId }}">
 
       <label for="fullName">
          Imię i nazwisko:
-         <input type="text" id="fullName" name="fullName" placeholder="imię i nazwisko" >
+         <input type="text" id="fullName" name="fullName" value="{{ customerData['fullName'] }}" placeholder="imię i nazwisko" >
       </label>
 
       <label for="city">
          Miejscowość:
          <select id="city" name="cityId">
             {% for key, value in cityArray %}
-               <option value="{{ cityArray[key]['id'] }}">{{ cityArray[key]['name'] }}</option>
+               <option {% if cityArray[key]['name'] == customerData['city'] %} selected {% endif %} value="{{ cityArray[key]['id'] }}">{{ cityArray[key]['name'] }}</option>
             {% endfor %}
          </select>
       </label>
 
       <label for="address">
          Adres:
-         <textarea id="address" name="address" placeholder="Podaj pełny adres (bez miejscowości)"></textarea>
+         <textarea id="address" name="address" placeholder="Podaj pełny adres (bez miejscowości)">{{ customerData['address'] }}</textarea>
       </label>
 
       <br>

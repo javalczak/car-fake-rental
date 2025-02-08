@@ -137,10 +137,12 @@ class VehicleService extends AbstractService
         return $vehicleArray;
     }
 
-    public function doesVehicleExist($vehicleId)
+    public function doesVehicleExist($vehicleId): bool
     {
         if (null === $this -> getVehicleObject($vehicleId)) {
-            return false ?? true;
+            return false;
+        } else {
+            return true;
         }
     }
 

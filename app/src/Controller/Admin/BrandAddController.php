@@ -37,7 +37,7 @@ class BrandAddController extends AbstractController
             if (true === $this -> vehicleService -> addNewBrand($brand)) {
                 $this -> addFlash('ok', 'Marka \''.$brand.'\' została dodana');
 
-                return $this -> redirectToRoute('admin_brand-add');
+                return $this -> redirectToRoute('admin_brand-list');
             }
         }
 

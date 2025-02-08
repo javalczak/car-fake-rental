@@ -18,44 +18,25 @@ class CustomerListController extends AbstractController
     /**
      * @throws Exception
      */
-    #[Route('/admin/customer-add', name: 'admin_customer-add')]
+    #[Route('/admin/customer-list', name: 'admin_customer-list')]
     public function index(Request $request): Response
     {
-        // simple validation
-        if ($request -> isMethod('POST')) {
+        $deleteId = $request -> get('deleteId');
 
-            $missingFields = $this -> customerService -> validateFields($request);
-
-            if (!empty($missingFields)) {
-                $this -> addFlash('error', 'Brakujące pola: ' . implode(', ', $missingFields) . '!');
-                return $this -> redirectToRoute('admin_customer-add');
+        if ($deleteId) {
+            try {
+                if ($this -> customerService -> doesCustomerCanBeDeleted($deleteId)) {
+                    $this -> customerService -> deleteCustomer($deleteId);
+                    $this -> addFlash('success', 'Użytkownik pojazdu został usunięty!');
+                }
+            } catch (Exception $e) {
+                $this -> addFlash('error', 'Błąd: ' . $e -> getMessage());
             }
-
-
-
-
-//
-//            try {
-//                $maintenance = $request -> get('maintenance') !== null;
-//                $this -> vehicleService -> addNewVehicle(
-//                    $request -> get('brandId'),
-//                    $request -> get('model'),
-//                    $request -> get('fuelTypeId'),
-//                    $request -> get('description'),
-//                    $request -> get('vin'),
-//                    $request -> get('plate'),
-//                    $maintenance
-//                );
-//                $this -> addFlash('success', 'Pojazd został dodany pomyślnie!');
-//            } catch (InvalidArgumentException $e) {
-//                $this -> addFlash('error', $e -> getMessage());
-//
-//                return $this -> redirectToRoute('admin_vehicle-add');
-//            }
         }
 
-        return $this->render('admin/customer-add.html.twig', [
+        return $this->render('admin/customer-list.html.twig', [
             'cityArray' => $this -> customerService -> getCityArray(),
+            'customerArray' => $this -> customerService -> getCustomerArray(),
         ]);
     }
 }

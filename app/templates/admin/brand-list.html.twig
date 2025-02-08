@@ -1,0 +1,45 @@
+{% extends 'admin-base.html.twig' %}
+{% block content %}
+
+    <h2>Lista producentów pojazdów</h2>
+    <hr>
+
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger" role="alert">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success" role="alert">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Nazwa</th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody>
+
+        {% for key, value in brandArray %}
+
+            <tr>
+                <th scope="row">{{ key + 1 }}</th>
+                <td>{{ brandArray[key]['name'] }}</td>
+                <td></td>
+                <td>
+                    <a onclick="return confirm('Potwierdź usunięcie');" href="/admin/brand-list?deleteId={{ brandArray[key]['id'] }}"><input class="button red" type="button" value="delete"></a>
+                </td>
+            </tr>
+
+        {% endfor %}
+
+        </tbody>
+    </table>
+
+{% endblock %}

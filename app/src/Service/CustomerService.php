@@ -5,7 +5,6 @@ namespace App\Service;
 use App\Entity\Customer;
 use DateTime;
 use Exception;
-use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Request;
 
 class CustomerService extends AbstractService
@@ -22,7 +21,7 @@ class CustomerService extends AbstractService
             -> getResult();
 
         if (empty($result)) {
-            throw new Exception('Wynik jest pusty!');
+            throw new Exception('Tabela miejscowości jest pusta');
         }
 
         $cityArray = [];
@@ -40,8 +39,7 @@ class CustomerService extends AbstractService
     {
         $fields = [
             'fullName' => 'Imię i nazwisko',
-            'address' => 'Adres',
-            'id' => 'Numer dowodu osobistego'
+            'address' => 'Adres'
         ];
 
         $missingFields = [];
@@ -55,142 +53,114 @@ class CustomerService extends AbstractService
         return $missingFields;
     }
 
-    public function addCustomer($fullName, $address, $idNumber, $cityId): void
+    public function generateUniqueCode(): string
     {
-        // validation
-        if (empty($fullName) || empty($address) || empty($idNumber) || empty($cityId)) {
-            throw new InvalidArgumentException('Wszystkie pola są wymagane!');
-        }
+        return substr(str_shuffle(str_repeat(
+            '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', 6
+        )), 0, 6);
+    }
 
-        if (!$this -> getCityObject($cityId)) {
-            throw new InvalidArgumentException('Brak wskazanej miejscowości');
-        }
-
+    public function addCustomer($fullName, $address, $cityId): ? string
+    {
         $newCustomer = new Customer();
         $newCustomer -> setFullName(trim($fullName));
         $newCustomer -> setAddress(trim($address));
-        $newCustomer -> setIdNumber(trim($idNumber));
+        $newCustomer -> setIdNumber($this -> generateUniqueCode());
         $newCustomer -> setCity($this -> getCityObject($cityId));
         $newCustomer -> setAddedAt(new DateTime('now'));
 
         $this -> save($newCustomer);
+
+        return $newCustomer -> getIdNumber();
     }
 
+    public function updateCustomer($customerId, $fullName, $address, $cityId): ? string
+    {
+        $customer = $this -> getCustomerObject($customerId);
+        $customer -> setFullName(trim($fullName));
+        $customer -> setAddress(trim($address));
+        $customer -> setCity($this -> getCityObject($cityId));
 
-//
-//    public function doesVehicleCanBeDeleted($vehicleId): bool
-//    {
-//        // sprawdzamy, czy taki vehicle istnieje
-//        if (false === $this -> vehicleRepo -> find($vehicleId)) {
-//            throw new Exception('Nie mamy takiej fury na stanie');
-//        }
-//
-//        // sprawdzamy, czy jest w użyciu
-//        // TODO: later
-//
-//        return true;
-//    }
-//
+        $this -> save($customer);
 
+        return $customer -> getIdNumber();
+    }
 
-//
-//    public function getVehicleArray(): array
-//    {
-//        $result = $this -> vehicleRepo -> createQueryBuilder('table')
-//            -> select('table')
-//            -> orderBy('table.id', 'DESC')
-//            -> getQuery()
-//            -> getResult();
-//
-//        $vehicleArray = [];
-//        /** @var Vehicle $item */
-//        foreach ($result as $item) {
-//            $vehicleArray[] = [
-//                'id' => $item -> getId(),
-//                'brand' => $item -> getBrand() -> getName(),
-//                'type' => $item -> getType(),
-//                'maintenance' => $item -> isMaintenance(),
-//                'plate' => $item -> getPlate(),
-//                'description' => $item -> getDescription(),
-//                'fuel' => $item -> getFuel() -> getFuel()
-//            ];
-//        }
-//
-//        return $vehicleArray;
-//    }
-//
-//    /**
-//     * @throws Exception
-//     */
-//    public function doesVehicleCanBeDeleted($vehicleId): bool
-//    {
-//        // sprawdzamy, czy taki vehicle istnieje
-//        if (false === $this -> vehicleRepo -> find($vehicleId)) {
-//            throw new Exception('Nie mamy takiej fury na stanie');
-//        }
-//
-//        // sprawdzamy, czy jest w użyciu
-//        // TODO: later
-//
-//        return true;
-//    }
-//
-//    public function deleteVehicle($vehicleId): void
-//    {
-//        $result = $this -> getVehicleObject($vehicleId);
-//        // TODO: clear rental history
-//        $this -> delete($result);
-//    }
-//
-//    public function getVehicleData($vehicleId): array
-//    {
-//        $record = $this -> getVehicleObject($vehicleId);
-//
-//        return [
-//            'id' => $record -> getId(),
-//            'brandId' => $record -> getBrand() -> getId(),
-//            'model' => $record -> getType(),
-//            'fuelTypeId' => $record -> getFuel() -> getId(),
-//            'fuelTypeName' => $record -> getFuel() -> getFuel(),
-//            'description' => $record -> getDescription(),
-//            'vin' => $record -> getVin(),
-//            'plate' => $record -> getPlate(),
-//            'maintenance' => $record -> isMaintenance(),
-//        ];
-//    }
-//
-//    public function updateVehicleData($vehicleId, $brandId, $type, $fuelTypeId, $description, $vin, $plate, $maintenance): void
-//    {
-//        $record = $this -> getVehicleObject($vehicleId);
-//        $record -> setBrand($this -> getBrandObject($brandId));
-//        $record -> setType(trim($type));
-//        $record -> setFuel($this -> getFuelTypeObject($fuelTypeId));
-//        $record -> setDescription(trim($description));
-//        $record -> setVin(trim($vin));
-//        $record -> setPlate(trim($plate));
-//        $record -> setMaintenance($maintenance);
-//
-//        $this -> save($record);
-//    }
-//
-//    public function validateFields(Request $request): array
-//    {
-//        $fields = [
-//            'brandId' => 'Marka',
-//            'model' => 'Model',
-//            'fuelTypeId' => 'Paliwo',
-//            'vin' => 'VIN',
-//            'plate' => 'Numer rejestracyjny'
-//        ];
-//
-//        $missingFields = [];
-//
-//        foreach ($fields as $key => $label) {
-//            if (empty(trim($request -> $key))) {
-//                $missingFields[] = $label;
-//            }
-//        }
-//
-//        return $missingFields;
-//    }
+    public function doesCityExist($cityId): bool
+    {
+        if (null === $this -> getCityObject($cityId)) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public function getCustomerArray(): array
+    {
+        $result = $this -> customerRepo ->  createQueryBuilder('table')
+            -> select('table')
+            -> orderBy('table.addedAt','DESC')
+            -> getQuery()
+            -> getResult();
+
+        $customerArray = [];
+        /** @var Customer $item */
+        foreach ($result as $item) {
+            $customerArray[] = [
+                'id' => $item -> getId(),
+                'fullName' => $item -> getFullName(),
+                'address' => $item -> getAddress(),
+                'idNumber' => $item -> getIdNumber(),
+                'addedAt' => $item -> getAddedAt(),
+                'city' => $item -> getCity() -> getName()
+            ];
+        }
+
+        return $customerArray;
+    }
+
+    public function doesCustomerIdExist($customerId)
+    {
+        if (null === $this -> getCustomerObject($customerId)) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public function getCustomerData($customerId): array
+    {
+        $record = $this -> getCustomerObject($customerId);
+
+        return [
+            'id' => $record -> getId(),
+            'city' => $record -> getCity() -> getName(),
+            'fullName' => $record -> getFullName(),
+            'address' => $record -> getAddress(),
+            'idNumber' => $record -> getIdNumber(),
+            'addedAt' => $record -> getAddedAt(),
+        ];
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function doesCustomerCanBeDeleted($customerId): true
+    {
+        // TODO: sprawdzić, czy ma jakieś auto
+
+        // Sprawdzamy, czy taki customer istnieje
+        if (null === $this -> getCustomerObject($customerId)) {
+            throw new Exception('Nie mamy takiego użytkownika');
+        }
+        // Sprawdzamy, czy jest w użyciu
+        // TODO: later
+
+        return true;
+    }
+
+    public function deleteCustomer($customerId): void
+    {
+        $this -> delete($this -> getCustomerObject($customerId));
+    }
 }
