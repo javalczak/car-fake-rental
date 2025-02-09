@@ -9,25 +9,23 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use OpenApi\Attributes as OA;
+
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class RentVehicle extends AbstractController
 {
     public function __construct(
         private readonly ApiService $apiService,
-    )
-    {
-    }
+    ){}
 
-    #[Route('/api/vehicle-rent/{vehicleId}', name: 'api_vehicle-rent', methods: ['POST'])]
-    public function setRentVehicle($vehicleId, Request $request, ValidatorInterface $validator): JsonResponse
+    #[Route('/api/rent', name: 'api_vehicle-rent', methods: ['POST'])]
+    public function setRentVehicle(Request $request, ValidatorInterface $validator): JsonResponse
     {
-        $params = json_decode($request->getContent(), true);
+        $params = json_decode($request -> getContent(), true);
 
         $dto = new RentVehicleDto();
         $dto -> vehicleId = $params['vehicleId'] ?? null;
-        $dto -> login = $params['login'] ?? null;
+        $dto -> rentalCode = $params['rentalCode'] ?? null;
 
         // validate
         $errors = $validator -> validate($dto);
@@ -40,20 +38,36 @@ class RentVehicle extends AbstractController
             return $this->json(['success' => false, 'errors' => $errorMessages], Response::HTTP_BAD_REQUEST);
         }
 
-        // customer exists
+        // in use?
+        if (true ===  $this -> apiService -> doesVehicleIsInUse($dto -> vehicleId)) {
+            return $this -> json(['success' => false, 'message' => '', 'errorMessage' => "Auto niedostępne"], Response::HTTP_OK);
+        }
 
-
-
-        $rentId = 1;
-
-//        $customerId = $this -> apiService -> addCustomer(
-//            $dto -> fullName,
-//            $dto -> address,
-//            $dto -> idNumber,
-//            $dto -> cityId
-//        );
-
-        return $this->json(['success' => true, 'rent id:' => $rentId], Response::HTTP_OK);
+        $this -> apiService -> rentVehicle($dto -> vehicleId, $dto -> rentalCode);
+        return $this -> json(['success' => true, 'message' => 'Auto wynajęte'], Response::HTTP_OK);
     }
+
+    #[Route('/api/rent-delete', name: 'api_vehicle-rent-delete', methods: ['DELETE'])]
+    public function deleteRentVehicle(Request $request, ValidatorInterface $validator): JsonResponse
+    {
+        $params = json_decode($request -> getContent(), true);
+
+        $dto = new RentVehicleDto();
+        $dto -> vehicleId = $params['vehicleId'] ?? null;
+        $dto -> rentalCode = $params['rentalCode'] ?? null;
+
+        // validate
+        $errors = $validator -> validate($dto);
+
+        if (count($errors) > 0) {
+            $errorMessages = [];
+            foreach ($errors as $error) {
+                $errorMessages[] = $error->getMessage();
+            }
+            return $this->json(['success' => false, 'errors' => $errorMessages], Response::HTTP_BAD_REQUEST);
+        }
+
+    }
+
 
 }

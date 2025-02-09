@@ -47,6 +47,18 @@ use Doctrine\ORM\EntityManagerInterface;
         return $vehicleArray;
     }
 
+    public function doesVehicleIsInUse($vehicleId): bool
+    {
+        $vehicle = $this -> vehicleRepo -> find($vehicleId);
+        $result = $this -> customerRepo -> findBy(['uses' => $vehicle]);
+
+        if (empty($result)) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     public function customerExists($fullName)
     {
         return $this -> customerRepo -> createQueryBuilder('table')
@@ -108,5 +120,25 @@ use Doctrine\ORM\EntityManagerInterface;
         } else {
            return $result[0] -> getIdNumber();
         }
+    }
+
+    public function getCustomerIdViaRentalCode($rentalCode)
+    {
+        $result = $this -> customerRepo -> findBy(['idNumber' => $rentalCode]);
+
+        return $result[0] -> getId();
+    }
+
+    public function rentVehicle($vehicleId, $rentalCode): void
+    {
+        // find customer id via rental code
+        $customerId = $this -> getCustomerIdViaRentalCode($rentalCode);
+
+
+        $customer = $this -> customerRepo -> find($customerId);
+        $customer -> setUses($this -> vehicleRepo -> find($vehicleId));
+
+        $this -> em -> persist($customer);
+        $this -> em -> flush();
     }
 }

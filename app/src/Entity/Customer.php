@@ -30,6 +30,9 @@ class Customer
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $addedAt = null;
 
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    private ?Vehicle $uses = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -91,6 +94,18 @@ class Customer
     public function setAddedAt(\DateTimeInterface $addedAt): static
     {
         $this->addedAt = $addedAt;
+
+        return $this;
+    }
+
+    public function getUses(): ?Vehicle
+    {
+        return $this->uses;
+    }
+
+    public function setUses(?Vehicle $uses): static
+    {
+        $this->uses = $uses;
 
         return $this;
     }
