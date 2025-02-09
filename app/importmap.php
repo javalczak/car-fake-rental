@@ -25,4 +25,7 @@ return [
     '@hotwired/turbo' => [
         'version' => '7.3.0',
     ],
+    'core-js/internals/is-forced' => [
+        'version' => '3.40.0',
+    ],
 ];

@@ -7,8 +7,6 @@ app.config(function($interpolateProvider) {
 app.controller('VehicleController', function($scope, $http) {
     console.log('Kontroler VehicleController działa!');
 
-    // vehicle:get
-    $scope.title = 'wynajem pojazdów - lista';
     $http.get('http://localhost:1102/api/vehicle')
         .then(function(response) {
             $scope.vehicles = response.data.items;
@@ -21,43 +19,42 @@ app.controller('VehicleController', function($scope, $http) {
 
 app.controller('GetCodeController', function($scope, $http) {
 
-    $scope.errorMessage = '';
-    $scope.message = '';
-
-    console.log('Kontroler GetCodeController działa!');
-
     $scope.customerData = {
         fullName: '',
-        cityId: 1,
+        city: '1',
         address: '',
     };
 
     $scope.submitForm = function () {
-        console.log('form działa!');
 
         var fullName = $scope.customerData.fullName;
         var address = $scope.customerData.address;
+        var city = $scope.customerData.city;
 
         $http.post('http://localhost:1102/api/customer', {
             fullName: fullName,
             address: address,
-            cityId: 1,
-
+            cityId: city,
         })
             .then(function (response) {
-                console.log('Odpowiedź z API:', response.data);
-                $scope.message = response.data.message[1];
-                $scope.messageType = response.data.success;
-                console.log('Odpowiedź z API:', 'poformatowano');
+                console.log('API response: ', response.data);
+
+                $scope.result = response.data.success;
+
+                if ($scope.result === false) {
+                    $scope.messageFalse = response.data.errorMessage[0];
+                    $scope.messageOk = '';
+                } else {
+                    $scope.messageOk = 'rental code is: ' + response.data.rentalCode;
+                    $scope.messageFalse = '';
+                }
+
             })
             .catch(function (error) {
                 console.error('Błąd podczas wysyłania danych do customer:', error);
-                $scope.errorMessage = response.data.message[1];
-                $scope.errorMssageType = response.data.success;
-                console.log('Odpowiedź z API:', 'nie wieszlo na pozionie web');
+                $scope.messageFalse = error.data.message;
             });
-    }
-
+        }
 });
 
 

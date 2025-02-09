@@ -3,8 +3,8 @@
     <div ng-controller="GetCodeController">
 
         <h1>Get rental code</h1>
-            <div  ng-if="errorMessage" class="alert alert-danger" role="alert">{[{ errorMessage }]}</div>
-            <div  ng-if="message" class="success alert-success" role="alert">{[{ message }]}</div>
+            <div  ng-if="messageOk" class="alert alert-success" role="alert">{[{ messageOk }]}</div>
+            <div  ng-if="messageFalse" class="alert alert-danger" role="alert">{[{ messageFalse }]}</div>
         <hr>
         <h5>Wypełnij poniższy formularz:</h5>
 
@@ -17,7 +17,7 @@
 
             <label for="city">
                 Miejscowość:
-                <select id="city" name="city" >
+                <select id="city" name="city" ng-model="customerData.city">
                     {% for key, value in cityArray %}
                         <option  value="{{ cityArray[key]['id'] }}">{{ cityArray[key]['name'] }}</option>
                     {% endfor %}
@@ -30,7 +30,6 @@
             </label>
 
             <button type="submit" class="submit-button" ng-click="submitForm()">Uzyskaj kod</button>
-
 
         </form>
 

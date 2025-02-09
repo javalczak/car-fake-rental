@@ -19,4 +19,14 @@
     array (
     ),
   ),
+  'core-js/internals/is-forced' => 
+  array (
+    'version' => '3.40.0',
+    'dependencies' => 
+    array (
+    ),
+    'extraFiles' => 
+    array (
+    ),
+  ),
 );
