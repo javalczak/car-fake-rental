@@ -1,36 +1,9 @@
 {% extends 'base.html.twig' %}
 {% block body %}
-    <div ng-controller="GetCodeController">
-
-        <h1>Get rental code</h1>
-            <div  ng-if="messageOk" class="alert alert-success" role="alert">{[{ messageOk }]}</div>
-            <div  ng-if="messageFalse" class="alert alert-danger" role="alert">{[{ messageFalse }]}</div>
-        <hr>
-        <h5>Wypełnij poniższy formularz:</h5>
-
-        <form method="POST">
-
-            <label for="fullName">
-                Imię i nazwisko:
-                <input type="text" id="fullName" name="fullName" value="" ng-model="customerData.fullName" placeholder="imię i nazwisko" >
-            </label>
-
-            <label for="city">
-                Miejscowość:
-                <select id="city" name="city" ng-model="customerData.city">
-                    {% for key, value in cityArray %}
-                        <option  value="{{ cityArray[key]['id'] }}">{{ cityArray[key]['name'] }}</option>
-                    {% endfor %}
-                </select>
-            </label>
-
-            <label for="address">
-                Adres:
-                <textarea id="address" name="address" placeholder="Podaj pełny adres (bez miejscowości)" ng-model="customerData.address"></textarea>
-            </label>
-
-            <button type="submit" class="submit-button" ng-click="submitForm()">Uzyskaj kod</button>
-
-        </form>
-
-{% endblock %}
+            {% if story == 'rent' %}
+                {% include 'user/rentVehicle.html.twig' %}
+            {% else %}
+                {% include 'user/releaseVehicle.html.twig' %}
+            {% endif %}
+            
+{% endblock body %}

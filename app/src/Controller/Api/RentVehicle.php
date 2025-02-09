@@ -89,8 +89,8 @@ class RentVehicle extends AbstractController
         return $this -> json(['success' => true, 'message' => 'Auto wynajęte'], Response::HTTP_OK);
     }
 
-    #[Route('/api/rent', name: 'api_vehicle-rent-delete', methods: ['DELETE'])]
-    #[OA\Delete(
+    #[Route('/api/release', name: 'api_vehicle-rent-delete', methods: ['POST'])]
+    #[OA\Post(
         description: "Zwraca wynajęty pojazd",
         summary: "Zwraca pojazd na podstawie podanego ID pojazdu i kodu wynajmu",
         requestBody: new OA\RequestBody(
@@ -156,8 +156,9 @@ class RentVehicle extends AbstractController
         }
 
         // release vehicle
-        $this -> apiService -> releaseVehicle($dto -> vehicleId);
-        return $this -> json(['success' => false, 'message' => 'Auto zwrócone'], Response::HTTP_OK);
+        $customerId = $this -> apiService -> getCustomerIdViaRentalCode($dto -> rentalCode);
+        $this -> apiService -> releaseVehicle($dto -> vehicleId, $customerId);
+        return $this -> json(['success' => true, 'message' => 'Auto zwrócone'], Response::HTTP_OK);
     }
 
     private function validateDto($dto, ValidatorInterface $validator): ?JsonResponse
@@ -169,7 +170,7 @@ class RentVehicle extends AbstractController
             foreach ($errors as $error) {
                 $errorMessages[] = $error->getMessage();
             }
-            return $this->json(['success' => false, 'errors' => $errorMessages], Response::HTTP_BAD_REQUEST);
+            return $this->json(['success' => false, 'errorMessage' => $errorMessages], Response::HTTP_OK);
         }
 
         return null;

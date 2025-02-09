@@ -162,10 +162,10 @@ use Doctrine\ORM\EntityManagerInterface;
         $this -> em -> flush();
     }
 
-    public function releaseVehicle($vehicleId): void
+    public function releaseVehicle($vehicleId, $customerId): void
     {
         $vehicle = $this -> vehicleRepo -> find($vehicleId);
-        $customer = $this -> customerRepo -> findOneBy(['uses' => $vehicle]);
+        $customer = $this -> customerRepo -> findOneBy(['uses' => $vehicle, 'id' => $customerId]);
         $customer -> setUses(null);
 
         $this -> em -> persist($customer);

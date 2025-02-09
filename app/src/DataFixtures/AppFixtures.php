@@ -7,7 +7,6 @@ use App\Entity\City;
 use App\Entity\Customer;
 use App\Entity\FuelType;
 use App\Entity\Vehicle;
-use Cassandra\Date;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -16,8 +15,8 @@ use App\Entity\Admin;
 
 class AppFixtures extends Fixture
 {
-    private string $username = 'javalczak';
-    private string $pass = 'jadwigaPastuch';
+    private string $username = 'user';
+    private string $pass = '123456';
     private array $role = ['ROLE_ADMIN'];
 
     private array $fuelType = [

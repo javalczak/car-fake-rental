@@ -223,4 +223,16 @@ class VehicleService extends AbstractService
 
         return $missingFields;
     }
+
+    public function isVehicleUsedNow($vehicleId): bool
+    {
+        $vehicle = $this -> vehicleRepo -> find($vehicleId);
+        $result = $this -> customerRepo -> findBy(['uses' => $vehicle]);
+
+        if (!isset($result[0])) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 }

@@ -37,7 +37,6 @@ app.controller('GetCodeController', function($scope, $http) {
         })
             .then(function (response) {
                 console.log('API response: ', response.data);
-
                 $scope.result = response.data.success;
 
                 if ($scope.result === false) {
@@ -54,6 +53,70 @@ app.controller('GetCodeController', function($scope, $http) {
                 $scope.messageFalse = error.data.message;
             });
         }
+});
+
+app.controller('rentVehicleController', function($scope, $http) {
+
+    $scope.submitFormRent = function () {
+
+        var inputElement = document.getElementById("vehicleId");
+        var vehicleId = inputElement.getAttribute("title");
+        var rentalCode = $scope.rentalData.rentalCode;
+
+        $http.post('http://localhost:1102/api/rent', {
+            rentalCode: rentalCode,
+            vehicleId: vehicleId,
+        })
+
+            .then(function (response) {
+                console.log('API response: ', response.data);
+                $scope.result = response.data.success;
+
+                if ($scope.result === false) {
+                    $scope.messageFalse = response.data.errorMessage[0];
+                    $scope.messageOk = '';
+                } else {
+                    $scope.messageOk = response.data.message;
+                    $scope.messageFalse = '';
+                }
+            })
+            .catch(function (error) {
+                console.error('Błąd podczas wysyłania danych do rent:', error);
+                $scope.messageFalse = error.data.message;
+            });
+    }
+});
+
+app.controller('releaseVehicleController', function($scope, $http) {
+
+    $scope.submitFormRent = function () {
+
+        var inputElement = document.getElementById("vehicleId");
+        var vehicleId = inputElement.getAttribute("title");
+        var rentalCode = $scope.rentalData.rentalCode;
+
+        $http.post('http://localhost:1102/api/release', {
+            rentalCode: rentalCode,
+            vehicleId: vehicleId,
+        })
+
+            .then(function (response) {
+                console.log('API response: ', response.data);
+                $scope.result = response.data.success;
+
+                if ($scope.result === false) {
+                    $scope.messageFalse = response.data.errorMessage[0];
+                    $scope.messageOk = '';
+                } else {
+                    $scope.messageOk = response.data.message;
+                    $scope.messageFalse = '';
+                }
+            })
+            .catch(function (error) {
+                console.error('Błąd podczas wysyłania danych do rent:', error);
+                $scope.messageFalse = error.data.message;
+            });
+    }
 });
 
 

@@ -6,6 +6,18 @@
             {[{ errorMessage }]}
         </div>
 
+        {% for message in app.flashes('error') %}
+            <div class="alert alert-danger" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+
     <table class="vehicleTable">
         <thead>
         <tr>
@@ -14,7 +26,6 @@
             <th>Paliwo</th>
             <th>Blacha</th>
             <th>W serwisie</th>
-            <th>W w użyciu</th>
             <th></th>
         </tr>
         </thead>
@@ -25,15 +36,17 @@
             <td>{[{ vehicle.fuelType }]}</td>
             <td>{[{ vehicle.plate }]}</td>
             <td>{[{ vehicle.inMaintenance == 1 ? 'Tak' : 'Nie' }]}</td>
-            <td></td>
             <td>
-                  <span ng-if="vehicle.inMaintenance == 1">
-                        <a href="/admin/vehicle-return?vehicleId={[{ vehicle.id }]}"><input class="button green" type="button" value="zwróć"></a>
+                <span ng-if="vehicle.inMaintenance != 1">
+                  <span ng-if="vehicle.inUse != null">
+                        <a href="/user/rent?vehicleId={[{ vehicle.id }]}"><input class="button green" type="button" value="zwróć"></a>
                   </span>
 
-                <span ng-if="vehicle.inMaintenance == 0">
-                        <a href="/admin/vehicle-return?vehicleId={[{ vehicle.id }]}"><input class="button orange" type="button" value="zarezerwuj"></a>
+                <span ng-if="vehicle.inUse == null">
+                        <a href="/user/rent?vehicleId={[{ vehicle.id }]}"><input class="button orange" type="button" value="zarezerwuj"></a>
                 </span>
+              </span>
+
             </td>
         </tr>
         </tbody>
