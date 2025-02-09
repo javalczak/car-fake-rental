@@ -21,6 +21,14 @@ use Doctrine\ORM\EntityManagerInterface;
         $this -> customerRepo = $this -> em -> getRepository(Customer::class);
     }
 
+    public function whichUserUsesAVehicle($vehicleId): string | null
+    {
+        $vehicle = $this -> vehicleRepo -> find($vehicleId);
+        $customer = $this -> customerRepo -> findOneBy(['uses' => $vehicle]);
+
+        return $customer ?-> getId();
+    }
+
     public function getVehicleArray(): array
     {
         $result = $this -> vehicleRepo -> createQueryBuilder('table')
@@ -40,7 +48,7 @@ use Doctrine\ORM\EntityManagerInterface;
                 'plate' => $item -> getPlate(),
                 'inMaintenance' => $item -> getMaintenance(),
                 'description' => $item -> getDescription(),
-                'inUse' => 1
+                'inUse' => $this -> whichUserUsesAVehicle($item -> getId())
             ];
         }
 
@@ -53,6 +61,19 @@ use Doctrine\ORM\EntityManagerInterface;
         $result = $this -> customerRepo -> findBy(['uses' => $vehicle]);
 
         if (empty($result)) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public function canWeReleaseVehicle($vehicleId, $rentalCode): bool
+    {
+        $customerId = $this -> getCustomerIdViaRentalCode($rentalCode);
+        $vehicle = $this -> vehicleRepo -> find($vehicleId);
+        $result = $this -> customerRepo -> findBy(['uses' => $vehicle, 'id' => $customerId]);
+
+        if (!isset($result[0])) {
             return false;
         } else {
             return true;
@@ -134,11 +155,20 @@ use Doctrine\ORM\EntityManagerInterface;
         // find customer id via rental code
         $customerId = $this -> getCustomerIdViaRentalCode($rentalCode);
 
-
         $customer = $this -> customerRepo -> find($customerId);
         $customer -> setUses($this -> vehicleRepo -> find($vehicleId));
 
         $this -> em -> persist($customer);
         $this -> em -> flush();
+    }
+
+    public function releaseVehicle($vehicleId): void
+    {
+        $vehicle = $this -> vehicleRepo -> find($vehicleId);
+        $customer = $this -> customerRepo -> findOneBy(['uses' => $vehicle]);
+        $customer -> setUses(null);
+
+        $this -> em -> persist($customer);
+        $this-> em -> flush();
     }
 }
