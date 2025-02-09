@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use OpenApi\Attributes as OA;
 
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -19,6 +20,53 @@ class RentVehicle extends AbstractController
     ){}
 
     #[Route('/api/rent', name: 'api_vehicle-rent', methods: ['POST'])]
+    #[OA\Post(
+        description: "Wynajmuje pojazd",
+        summary: "Wynajmuje pojazd na podstawie podanego ID pojazdu i kodu wynajmu",
+        requestBody: new OA\RequestBody(
+            required: true,
+            content: new OA\JsonContent(
+                required: ["vehicleId", "rentalCode"],
+                properties: [
+                    new OA\Property(property: "vehicleId", description: "ID pojazdu do wynajęcia", type: "integer"),
+                    new OA\Property(property: "rentalCode", description: "Kod wynajmu pojazdu", type: "string")
+                ]
+            )
+        ),
+        tags: ["Vehicle"],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: "Pojazd wynajęty pomyślnie",
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: "success", type: "boolean", example: true),
+                        new OA\Property(property: "message", type: "string", example: "Pojazd wynajęty pomyślnie")
+                    ]
+                )
+            ),
+            new OA\Response(
+                response: 400,
+                description: "Błędy walidacji",
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: "success", type: "boolean", example: false),
+                        new OA\Property(property: "errors", type: "array", items: new OA\Items(type: "string"))
+                    ]
+                )
+            ),
+            new OA\Response(
+                response: 404,
+                description: "Pojazd niedostępny",
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: "success", type: "boolean", example: false),
+                        new OA\Property(property: "errorMessage", type: "string", example: "Pojazd niedostępny")
+                    ]
+                )
+            )
+        ]
+    )]
     public function setRentVehicle(Request $request, ValidatorInterface $validator): JsonResponse
     {
         $params = json_decode($request -> getContent(), true);
@@ -42,6 +90,53 @@ class RentVehicle extends AbstractController
     }
 
     #[Route('/api/rent', name: 'api_vehicle-rent-delete', methods: ['DELETE'])]
+    #[OA\Delete(
+        description: "Zwraca wynajęty pojazd",
+        summary: "Zwraca pojazd na podstawie podanego ID pojazdu i kodu wynajmu",
+        requestBody: new OA\RequestBody(
+            required: true,
+            content: new OA\JsonContent(
+                required: ["vehicleId", "rentalCode"],
+                properties: [
+                    new OA\Property(property: "vehicleId", description: "ID pojazdu do zwrotu", type: "integer"),
+                    new OA\Property(property: "rentalCode", description: "Kod wynajmu pojazdu", type: "string")
+                ]
+            )
+        ),
+        tags: ["Vehicle"],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: "Pojazd zwrócony pomyślnie",
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: "success", type: "boolean", example: true),
+                        new OA\Property(property: "message", type: "string", example: "Pojazd zwrócony pomyślnie")
+                    ]
+                )
+            ),
+            new OA\Response(
+                response: 400,
+                description: "Błędy walidacji",
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: "success", type: "boolean", example: false),
+                        new OA\Property(property: "errors", type: "array", items: new OA\Items(type: "string"))
+                    ]
+                )
+            ),
+            new OA\Response(
+                response: 404,
+                description: "Pojazd niedostępny",
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: "success", type: "boolean", example: false),
+                        new OA\Property(property: "errorMessage", type: "string", example: "Pojazd niedostępny")
+                    ]
+                )
+            )
+        ]
+    )]
     public function deleteRentVehicle(Request $request, ValidatorInterface $validator): JsonResponse
     {
         $params = json_decode($request -> getContent(), true);

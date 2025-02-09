@@ -18,8 +18,8 @@ class City extends AbstractController
     #[Route('/api/city', name: 'api-city-list', methods: ['GET'])]
     #[OA\Get(
         description: "Zwraca listę miejscowości w formacie json",
-        summary: "Pobiera listę miejscowoci",
-        tags: ["citiy"],
+        summary: "Pobiera listę miejscowości",
+        tags: ["city"],
         responses: [
             new OA\Response(
                 response: 200,

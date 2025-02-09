@@ -25,7 +25,7 @@ class Customer extends AbstractController
         requestBody: new OA\RequestBody(
             required: true,
             content: new OA\JsonContent(
-                required: ["fullName", "address", "idNumber", "cityId"],
+                required: ["fullName", "address", "cityId"],
                 properties: [
                     new OA\Property(property: "fullName", description: "Pełna nazwa klienta", type: "string"),
                     new OA\Property(property: "address", description: "Adres klienta", type: "string"),
@@ -41,7 +41,7 @@ class Customer extends AbstractController
                 content: new OA\JsonContent(
                     properties: [
                         new OA\Property(property: "success", type: "boolean", example: true),
-                        new OA\Property(property: "customerId", description: "ID nowo dodanego klienta", type: "integer")
+                        new OA\Property(property: "rentalCode", description: "kod RENTAL do wynajęcia pojazdu (hasło)", type: "string")
                     ]
                 )
             ),

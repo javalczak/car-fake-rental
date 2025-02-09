@@ -5,15 +5,14 @@ app.config(function($interpolateProvider) {
 });
 
 app.controller('VehicleController', function($scope, $http) {
-    console.log('Kontroler VehicleController działa!');
 
     $http.get('http://localhost:1102/api/vehicle')
         .then(function(response) {
             $scope.vehicles = response.data.items;
-            $scope.errorMessage = 'Nie można pobrać listy pojazdów';
         })
         .catch(function(error) {
             console.error('Błąd podczas pobierania danych:', error);
+            $scope.errorMessage = 'Nie można pobrać listy pojazdów';
         });
 });
 
