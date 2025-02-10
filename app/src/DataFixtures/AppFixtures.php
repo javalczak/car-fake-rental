@@ -58,8 +58,8 @@ class AppFixtures extends Fixture
 
     // dorzucamy parę fur
     private array $vehicle = [
-        ['brandId' => '2', 'type' => 'SVX', 'vin' => '0987654321CCVFRT', 'plate' => 'PO-CSV55', 'description' => 'sportowe blachowkręty', 'maintenance' => false, 'fuelId' => 1],
-        ['brandId' => '2', 'type' => 'Galant', 'vin' => '098FR5589SSWT', 'plate' => 'PO-4567DS', 'description' => 'trzykolorowy, ale 6 garów', 'maintenance' => false, 'fuelId' => 2],
+        ['brandId' => '1', 'type' => 'SVX', 'vin' => '0987654321CCVFRT', 'plate' => 'PO-CSV55', 'description' => 'sportowe blachowkręty', 'maintenance' => false, 'fuelId' => 1],
+        ['brandId' => '1', 'type' => 'Galant', 'vin' => '098FR5589SSWT', 'plate' => 'PO-4567DS', 'description' => 'trzykolorowy, ale 6 garów', 'maintenance' => false, 'fuelId' => 2],
         ['brandId' => '8', 'type' => 'Legendary', 'vin' => '09SDTYA76FRT', 'plate' => 'PO-AWARIA', 'description' => 'uszkodzony', 'maintenance' => true, 'fuelId' => 1],
         ['brandId' => '5', 'type' => 'SN24,', 'vin' => '...', 'plate' => 'PO-SUROWCE', 'description' => 'Ma kopyto', 'maintenance' => false, 'fuelId' => 6],
     ];
