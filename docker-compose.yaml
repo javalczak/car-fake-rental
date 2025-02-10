@@ -13,16 +13,6 @@ services:
             - ./app:/var/www/app
         networks:
             car-rental:
-    encore:
-        build:
-            context: ./Docker/node
-        volumes:
-            - ./app:/app
-        ports:
-            - "${DEV_SERVER_PORT:-8089}:8080"
-        working_dir: /app
-        #command: ["yarn", "install"]
-
     nginx:
         container_name: car-rental-nginx
         build:
