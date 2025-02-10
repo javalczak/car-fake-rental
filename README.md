@@ -7,7 +7,7 @@
 `$ docker-compose up -d --build`  
 `$ docker exec -it car-rental-php /bin/bash`  
 `$ composer install`  
-`$ php bin/console d:s:u--force`  
+`$ php bin/console d:s:u --force`  
 `$ php bin/console first:run / zaznacz yes`  
 `$ exit`  
 `$ cd app`  
